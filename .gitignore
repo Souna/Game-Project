@@ -36,6 +36,5 @@ x64
 .vs
 
 # Etc
-*.vcxproj
 *.filters
 *.user
