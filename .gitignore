@@ -33,6 +33,7 @@
 
 # Folders
 x64
+.vs
 
 # Etc
 *.vcxproj
