@@ -1,7 +1,6 @@
 ﻿#include "SunBitmap.h"
 #include "SunReader.h"
 #include <vector>
-//#include <zlib.h>
 #include "zlib.h"
 #include <algorithm>
 #include "SunNode.h"

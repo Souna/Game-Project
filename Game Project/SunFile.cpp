@@ -16,9 +16,13 @@ namespace sun_file
 
 	auto Init() -> Error
 	{
+		int ct = 0;
 		for (auto filename : sun_file::filenames)
 			if (std::ifstream{ filename }.good() == false)
+			{
+				ct++;
 				return Error(Error::Code::MISSING_FILE, filename);
+			}
 
 		// Try loading the files now_.
 		try

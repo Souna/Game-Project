@@ -168,7 +168,6 @@
     <ClInclude Include="SunTools.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="zlib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />

@@ -9,6 +9,7 @@ public:
 		NONE,
 		WINDOW,
 		MISSING_FILE,
+		MISSING_FILES,
 		AUDIO,
 		FILE_ERROR,
 		LENGTH
@@ -45,7 +46,8 @@ private:
 	{
 		"",
 		"Failed to create game window.",
-		"Missing a game file: ",
+		"Missing a game file.",
+		"Missing game files.",
 		"Failed to initialize audio files."
 	};
 };
