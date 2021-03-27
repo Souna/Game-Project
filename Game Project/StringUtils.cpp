@@ -22,7 +22,6 @@
 #include <sstream>
 #include <memory.h>
 
-
 //In MapleStrory ,some string like String.wz was stored as UTF-16 in order to internationalization(i18n)
 //I use a convert library from cocos2d-x (thanks for it) to convert U16 to U8 ,
 //if we use c++11 standard codecvt to convert it to UTF-8 we may occur some crash.(the reason remains to be identified.)
@@ -30,7 +29,6 @@
 #ifdef SUPPORT_CODECVT
 #	include <codecvt>
 #endif
-
 
 /*
 * Index into the table below with the first byte of a UTF-8 sequence to
@@ -334,7 +332,6 @@ auto StringUtils::getChar16VectorFromUTF16String(const std::u16string& utf16) ->
 	return ret;
 }
 
-
 auto StringUtils::formatTime(int64_t timestamp) -> std::string
 {
 	std::stringstream strtime;
@@ -407,7 +404,6 @@ auto StringUtils::splitMobData(const std::string& str, std::vector<int32_t>& out
 		outVec.emplace_back(std::stoi(val));
 	}
 }
-
 
 auto StringUtils::trim(std::string& str) -> void
 {

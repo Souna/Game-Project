@@ -7,10 +7,10 @@ public:
 	enum Code
 	{
 		NONE,
-		FILE_ERROR,
-		MISSING_FILE,
 		WINDOW,
+		MISSING_FILE,
 		AUDIO,
+		FILE_ERROR,
 		LENGTH
 	};
 
@@ -44,8 +44,8 @@ private:
 	static constexpr const char* messages[Code::LENGTH] =
 	{
 		"",
-		"Missing a game file: ",
 		"Failed to create game window.",
+		"Missing a game file: ",
 		"Failed to initialize audio files."
 	};
 };

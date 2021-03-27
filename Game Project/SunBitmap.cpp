@@ -1,11 +1,11 @@
 ﻿#include "SunBitmap.h"
 #include "SunReader.h"
 #include <vector>
-#include <zlib.h>
+//#include <zlib.h>
+#include "zlib.h"
 #include <algorithm>
 #include "SunNode.h"
 #include "Window.h"
-
 
 uint8_t const table4[0x10] =
 {
@@ -25,7 +25,6 @@ uint8_t const table6[0x40] =
 	0x82, 0x86, 0x8A, 0x8E, 0x92, 0x96, 0x9A, 0x9E, 0xA2, 0xA6, 0xAA, 0xAE, 0xB2, 0xB6, 0xBA, 0xBE,
 	0xC2, 0xC6, 0xCA, 0xCE, 0xD2, 0xD7, 0xDB, 0xDF, 0xE3, 0xE7, 0xEB, 0xEF, 0xF3, 0xF7, 0xFB, 0xFF
 };
-
 
 template <int N>
 void Scale(std::vector<uint8_t> const& input, std::vector<uint8_t>& output, int width, int height)
@@ -50,11 +49,9 @@ void Scale(std::vector<uint8_t> const& input, std::vector<uint8_t>& output, int 
 	}
 };
 
-
 SunBitmap::SunBitmap(int32_t h, int32_t w, uint32_t len, uint32_t o, std::shared_ptr<SunReader> r)
 	: height_(h), width_(w), length_(len), offset_(o), reader_(r)
 {
-
 }
 
 SunBitmap::~SunBitmap() {}
@@ -93,7 +90,6 @@ auto SunBitmap::Data() -> std::vector<uint8_t>&
 		inflateEnd(&strm);
 		return true;
 	};
-
 
 	std::copy(original, original + length_, input_.begin());
 

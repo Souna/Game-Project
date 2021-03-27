@@ -17,7 +17,7 @@ namespace sun_file
 	constexpr std::array<const char*, NUM_FILES> filenames = { "map.sun" };
 
 	// Initialize files before_ we can load them.
-	auto Init() -> Error;
+	auto Init()->Error;
 
 	// Load all SunFiles.
 	auto Load_All_Files(const std::string& file_path) -> void; // -> trailing return type?

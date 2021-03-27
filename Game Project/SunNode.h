@@ -28,36 +28,31 @@ public:
 		AUDIO = 6
 	};
 
-
 	SunNode() = default;
 	SunNode(const std::shared_ptr<SunReader>& reader);
 	SunNode(const std::shared_ptr<SunReader>& reader, SunNode* node);
 	~SunNode() = default;
 
-
 	auto Load(const std::shared_ptr<SunReader>& reader) -> void;
-	auto begin() -> SunNodes::iterator;
-	auto end() -> SunNodes::iterator;
+	auto begin()->SunNodes::iterator;
+	auto end()->SunNodes::iterator;
 
-
-	auto operator*() const -> SunNode;
+	auto operator*() const->SunNode;
 	auto operator==(SunNode const&) const -> bool;
 	auto operator!=(SunNode const&) const -> bool;
 	auto operator<(SunNode const&) const -> bool;
 	// Checks whether or not the node points to an actual node.
 	explicit operator bool() const;
 
-
-	auto operator[](unsigned int) -> SunNode&;
-	auto operator[](signed int) -> SunNode&;
-	auto operator[](unsigned long) -> SunNode&;
-	auto operator[](signed long) -> SunNode&;
-	auto operator[](unsigned long long) -> SunNode&;
-	auto operator[](signed long long) -> SunNode&;
-	auto operator[](std:: string const &) -> SunNode&;
-	auto operator[](char const *) -> SunNode&;
-	auto operator[](SunNode &) -> SunNode&;
-
+	auto operator[](unsigned int)->SunNode&;
+	auto operator[](signed int)->SunNode&;
+	auto operator[](unsigned long)->SunNode&;
+	auto operator[](signed long)->SunNode&;
+	auto operator[](unsigned long long)->SunNode&;
+	auto operator[](signed long long)->SunNode&;
+	auto operator[](std::string const&)->SunNode&;
+	auto operator[](char const*)->SunNode&;
+	auto operator[](SunNode&)->SunNode&;
 
 	operator unsigned char() const;
 	operator signed char() const;
@@ -76,44 +71,43 @@ public:
 	operator SunBitmap() const;
 	operator SunAudio();
 
-	auto Get_Integer(int64_t default_value = 0) const -> int64_t;
+	auto Get_Integer(int64_t default_value = 0) const->int64_t;
 	auto Get_Real(double default_value = 0) const -> double;
-	auto Get_String(std::string default_str = "")const -> std::string;
-	auto Get_Vector(vector2i = { 0, 0 }) -> vector2i;
-	auto Get_Bitmap() const -> SunBitmap;
-	auto Get_Audio() -> SunAudio;
+	auto Get_String(std::string default_str = "")const->std::string;
+	auto Get_Vector(vector2i = { 0, 0 })->vector2i;
+	auto Get_Bitmap() const->SunBitmap;
+	auto Get_Audio()->SunAudio;
 	auto Get_Boolean(bool def = false) const -> bool;
-	auto Get_Children_Size() -> int32_t;
+	auto Get_Children_Size()->int32_t;
 	// Returns the x-coordinate of the vector data value.
-	auto X() const -> int32_t;	
+	auto X() const->int32_t;
 	// Returns the y-coordinate of the vector data value.
-	auto Y() const -> int32_t;	
+	auto Y() const->int32_t;
 	// Returns the name of the node.
-	auto Name() -> std::string&;
-	auto Get_Size() const -> size_t;
+	auto Name()->std::string&;
+	auto Get_Size() const->size_t;
 	// Returns the root node of the file this node was derived from.
-	auto Root() -> SunNode&;
-
+	auto Root()->SunNode&;
 
 	// Takes a '/' separated string and resolves the given path.
-	auto Resolve(const char* path) -> SunNode&;
-	auto Resolve(bool expand_zero = true) -> SunNode&;
-	auto Get_Child(const char* name) -> SunNode&;
-	auto Find(const std::string& name ) -> SunNodes::iterator;
+	auto Resolve(const char* path)->SunNode&;
+	auto Resolve(bool expand_zero = true)->SunNode&;
+	auto Get_Child(const char* name)->SunNode&;
+	auto Find(const std::string& name)->SunNodes::iterator;
 	// Computes file size.
-	auto Compute_End_Of_Data() -> int32_t;
-	auto Query_Identity() -> std::string;
+	auto Compute_End_Of_Data()->int32_t;
+	auto Query_Identity()->std::string;
 	auto Expand_Root(std::string name) -> bool;
 	auto Try_Expand() -> void;
-	auto Get_Children(bool expand = true) -> SunNodes&;
+	auto Get_Children(bool expand = true)->SunNodes&;
 	auto Children_Size() -> int;
 	auto Clear() -> void;
 	auto Exist(const std::string& name) -> bool;
 	// Sets the type of data the node will contain.
 	auto Set_Node_Type(NodeType type) -> void;
 	// Gets the type of data contained within the node.
-	auto Get_Node_Type() -> NodeType;
-	auto Get_Parent() -> SunNode*;
+	auto Get_Node_Type()->NodeType;
+	auto Get_Parent()->SunNode*;
 	auto Set_Parent(SunNode* parent) -> void;
 	std::string identity_;
 
@@ -138,7 +132,7 @@ private:
 };
 
 //More convenience string concatenation operators
-auto operator+(std::string, SunNode&) -> std::string;
-auto operator+(char const*, SunNode&) -> std::string;
-auto operator+(SunNode&, std::string) -> std::string;
-auto operator+(SunNode&, char const*) -> std::string;
+auto operator+(std::string, SunNode&)->std::string;
+auto operator+(char const*, SunNode&)->std::string;
+auto operator+(SunNode&, std::string)->std::string;
+auto operator+(SunNode&, char const*)->std::string;

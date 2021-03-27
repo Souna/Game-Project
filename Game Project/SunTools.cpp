@@ -25,7 +25,7 @@ auto sun_tools::Split(const std::string& str, std::vector<std::string>& ret, std
 
 		if (!tmp.empty())
 		{
-			if (tmp == "" && !allowNull) 
+			if (tmp == "" && !allowNull)
 			{
 				ret.push_back(tmp);
 			}
@@ -43,7 +43,7 @@ auto sun_tools::EndsWith(const std::string& str, const std::string& endStr) -> b
 	{
 		return false;
 	}
-	if (str.size() < endStr.size()) 
+	if (str.size() < endStr.size())
 	{
 		return false;
 	}
@@ -52,7 +52,6 @@ auto sun_tools::EndsWith(const std::string& str, const std::string& endStr) -> b
 
 auto sun_tools::GetIndexFromTypes(std::string& str) -> int32_t
 {
-
 	static std::string types[6] =
 	{
 		"Shape2D#Convex2D",
@@ -65,7 +64,7 @@ auto sun_tools::GetIndexFromTypes(std::string& str) -> int32_t
 	int i = 0;
 	for (auto& a : types)
 	{
-		if (a == str) 
+		if (a == str)
 		{
 			return i;
 		}

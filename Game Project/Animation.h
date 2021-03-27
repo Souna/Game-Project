@@ -21,13 +21,13 @@ namespace game
 
 		auto Draw() const -> void;
 
-		auto Start_Opacity() const -> uint8_t;
-		auto Start_Scale() const -> uint16_t;
-		auto Get_Delay() const -> uint16_t;
-		auto Get_Origin() const-> Point<int16_t>;
-		auto Get_Dimensions() const-> Point<int16_t>;
-		auto Get_Head() const -> Point<int16_t>;
-		auto Get_Bounds() const-> Rectangle<int16_t>;
+		auto Start_Opacity() const->uint8_t;
+		auto Start_Scale() const->uint16_t;
+		auto Get_Delay() const->uint16_t;
+		auto Get_Origin() const->Point<int16_t>;
+		auto Get_Dimensions() const->Point<int16_t>;
+		auto Get_Head() const->Point<int16_t>;
+		auto Get_Bounds() const->Rectangle<int16_t>;
 		auto Opacity_Step(uint16_t timestep) const -> float;
 		auto Scale_Step(uint16_t timestep) const -> float;
 
@@ -40,13 +40,11 @@ namespace game
 		Point<int16_t> head_;
 	};
 
-
 	//===================================================================================================
 	//===================================================================================================
 	//===================================================================================================
 	//===================================================================================================
 	//===================================================================================================
-
 
 	/**
 	* A class which consists of multiple frames/textures to make an Animation.
@@ -63,13 +61,12 @@ namespace game
 
 		auto Draw() const -> void;
 
-		auto Get_Delay(int16_t frame) const -> uint16_t;
-		auto Get_Delay_Until(int16_t frame) const -> uint16_t;
-		auto Get_Origin() const -> Point<int16_t>;
-		auto Get_Dimensions() const -> Point<int16_t>;
-		auto Get_Head() const -> Point<int16_t>;
-		auto Get_Bounds() const-> Rectangle<int16_t>;
-
+		auto Get_Delay(int16_t frame) const->uint16_t;
+		auto Get_Delay_Until(int16_t frame) const->uint16_t;
+		auto Get_Origin() const->Point<int16_t>;
+		auto Get_Dimensions() const->Point<int16_t>;
+		auto Get_Head() const->Point<int16_t>;
+		auto Get_Bounds() const->Rectangle<int16_t>;
 
 	private:
 		auto Get_Frame() const -> const Frame&;

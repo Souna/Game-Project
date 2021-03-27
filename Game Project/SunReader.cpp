@@ -9,7 +9,6 @@
 #include <limits.h>
 #include <windows.h>
 
-
 // i am so stupid and idk what this USE_MMAP stuff is for
 SunReader::SunReader(const std::string& p) : length_(0), position_(0), file_(nullptr), path_(p)
 {
@@ -57,7 +56,7 @@ auto SunReader::Valid() -> bool
 		// Read copyright string
 		std::string copyright = Read_Null_Terminated_String();
 
-		// 
+		//
 		if (0x616e756f536e7553 == signature && Get_Length() == file_size + header_size)
 		{
 			header_.size = header_size;
@@ -111,10 +110,10 @@ auto SunReader::Read_Null_Terminated_String() -> std::string
 	return string;
 }
 
-auto SunReader::Transit_String(int64_t offset) -> std::string 
-{	
+auto SunReader::Transit_String(int64_t offset) -> std::string
+{
 	uint8_t a = Read<uint8_t>();
-	switch (a) 
+	switch (a)
 	{
 	case 0x00: case 0x73:
 		return Read_Decrypt_String();
@@ -124,7 +123,7 @@ auto SunReader::Transit_String(int64_t offset) -> std::string
 	return "";
 }
 
-auto SunReader::Read_String() -> std::string 
+auto SunReader::Read_String() -> std::string
 {
 	std::string string;
 	auto size = Read<int8_t>();
@@ -203,7 +202,6 @@ auto SunReader::Read_Bytes(int32_t length) -> std::unique_ptr<int8_t[]>
 	return array;
 }
 
-
 auto SunReader::Read_Short() -> int16_t
 {
 	return Read<int16_t>();
@@ -261,7 +259,7 @@ auto SunReader::Read_Compressed_Long() -> int64_t
 
 auto SunReader::Set_Position(int64_t position) -> bool
 {
-	if (position > length_) 
+	if (position > length_)
 	{
 		game::Console::Get().Print(__func__, "OutOfFileSizeException");
 		return false;

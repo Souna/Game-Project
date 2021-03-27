@@ -135,6 +135,9 @@
     <ClInclude Include="PhysicsObject.h">
       <Filter>Header Files\Gameplay\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="zlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

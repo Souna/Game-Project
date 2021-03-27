@@ -20,9 +20,9 @@ namespace game
 		}
 	}
 
-	Texture::Texture(){}
+	Texture::Texture() {}
 
-	Texture::~Texture(){}
+	Texture::~Texture() {}
 
 	auto Texture::Draw() const -> void
 	{

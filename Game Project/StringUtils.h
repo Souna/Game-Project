@@ -181,7 +181,6 @@ namespace StringUtils
 	*/
 	auto getChar16VectorFromUTF16String(const std::u16string& utf16)->std::vector<char16_t>;
 
-
 	auto split(const std::u16string& str, int32_t len, std::vector<std::u16string>& vec) -> void;
 	auto splitMobData(const std::string& str)->std::vector<int32_t>;
 	auto splitMobData(const std::string& str, std::vector<int32_t>& outVec)->void;

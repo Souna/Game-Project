@@ -21,7 +21,6 @@ Error Window::Init()
 	return Error::NONE;
 }
 
-
 bool Window::OnUserCreate()
 {
 	// Run initialize and display any errors.
@@ -37,7 +36,7 @@ bool Window::OnUserCreate()
 			std::cout << "Message: " << args << std::endl;
 
 		if (can_retry)
-			std::cout << "Enter 'r' to try again." << std::endl;
+			std::cout << "Enter 'r' to retry." << std::endl;
 
 		std::string command;
 		std::cin >> command;
@@ -68,7 +67,7 @@ bool Window::OnUserUpdate(float fElapsedTime)
 
 void Window::DisplayDebugInfo(olc::vi2d& mouse)
 {
-	DrawString({ 10,10 }, "Mouse Physical: " + std::to_string((int)mouse.x) + ", " + std::to_string((int)mouse.y), olc::YELLOW, 2.0f);
+	DrawString({ 10,10 }, "Mouse Physical: " + std::to_string((int)mouse.x) + ", " + std::to_string((int)mouse.y), olc::RED, 2.0f);
 	//DrawString({ 10,30 }, "Map ID: " + std::to_string(game::Stage::Get().Get_Map_ID()), olc::YELLOW, 2.0f);
 }
 
@@ -79,7 +78,7 @@ void Window::Update()
 
 void Window::Draw()
 {
+	//DrawString({})
 	game::Stage::Get().Draw();
 	DisplayDebugInfo(vimouse_);
-
 }

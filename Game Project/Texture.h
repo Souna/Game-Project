@@ -20,11 +20,11 @@ namespace game
 		auto Shift(Point<int16_t> amount) -> void;
 
 		auto Is_Valid() const -> bool;
-		auto Width() const -> int16_t;
-		auto Height() const -> int16_t;
-		auto Get_Origin() const -> Point<int16_t>;
-		auto Get_Dimensions() const -> Point<int16_t>;
-		auto Find_Child(SunNode src, std::string) -> SunNode;
+		auto Width() const->int16_t;
+		auto Height() const->int16_t;
+		auto Get_Origin() const->Point<int16_t>;
+		auto Get_Dimensions() const->Point<int16_t>;
+		auto Find_Child(SunNode src, std::string)->SunNode;
 
 	private:
 		SunBitmap bitmap_;

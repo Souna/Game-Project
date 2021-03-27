@@ -3,7 +3,6 @@
 #include "SunNode.h"
 #include <memory.h>
 
-
 SunAudio::SunAudio(std::shared_ptr<SunReader> reader, uint32_t offset, uint32_t length, int32_t header)
 	: reader_(reader), offset_(offset), length_(length), header_(header), bits_(NULL), channel_(NULL), rate_(NULL)
 {
@@ -29,7 +28,7 @@ auto SunAudio::Get_Audio_Data() -> const int8_t*
 	{
 		return nullptr;
 	}
-	if (buffer_ == nullptr) 
+	if (buffer_ == nullptr)
 	{
 		buffer_ = reader_->Get_Offset(offset_);
 	}
@@ -168,7 +167,7 @@ auto SunAudio::Get_Wave_Header() -> int8_t*
 	return reader_->Read_Bytes(0x10).release();
 }
 
-int32_t SunAudio::bit_rates_[2][3][16] = 
+int32_t SunAudio::bit_rates_[2][3][16] =
 {
 	//mpeg1
 	{
@@ -283,7 +282,7 @@ int32_t SunAudio::bit_rates_[2][3][16] =
 			160,
 			0,
 		}, // layer3
-	} 
+	}
 };
 
 int32_t SunAudio::frequencies_[][4] =
@@ -330,7 +329,7 @@ int32_t SunAudio::samples_per_frames_[][3] =
 	},
 };
 
-int32_t SunAudio::coefficients_[][3] = 
+int32_t SunAudio::coefficients_[][3] =
 {
 	//mpeg1
 	{

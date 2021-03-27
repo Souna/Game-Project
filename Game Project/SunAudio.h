@@ -11,12 +11,10 @@ public:
 	SunAudio() = default;
 	SunAudio(std::shared_ptr<SunReader> reader, uint32_t offset, uint32_t len, int32_t header);
 
-
-	auto Get_Data() -> std::shared_ptr<std::vector<uint8_t>>&;
+	auto Get_Data()->std::shared_ptr<std::vector<uint8_t>>&;
 	auto Get_Audio_Data() -> const int8_t*;
 	auto Get_Information() -> void;
-	auto Get_Wave_Header() -> int8_t*;
-
+	auto Get_Wave_Header()->int8_t*;
 
 	inline auto Get_Id() const { return offset_; };
 	inline auto Get_Length() const { return length_; };
@@ -24,7 +22,6 @@ public:
 	inline auto Get_Channel() const { return channel_; };
 	inline auto Get_Rate() const { return rate_; };
 	inline auto Get_Bits() const { return bits_; };
-
 
 private:
 	int32_t channel_;
