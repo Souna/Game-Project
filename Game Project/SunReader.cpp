@@ -56,7 +56,7 @@ auto SunReader::Valid() -> bool
 		// Read copyright string
 		std::string copyright = Read_Null_Terminated_String();
 
-		//
+		// SunSouna signature in hex
 		if (0x616e756f536e7553 == signature && Get_Length() == file_size + header_size)
 		{
 			header_.size = header_size;

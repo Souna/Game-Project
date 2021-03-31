@@ -4,6 +4,9 @@
 #include "olcPixelGameEngine.h"
 
 class SunReader;
+/**
+* A property containing a bitmap image.
+*/
 class SunBitmap
 {
 public:
@@ -20,7 +23,7 @@ public:
 	// Converts a SunBitMap to an olc::Sprite*.
 	auto To_Sprite()->olc::Sprite*;
 	// Converts a SunBitMap to an olc::Sprite* and then converts said sprite
-	// into an olc::Decal* before returning. Prefer this method.
+	// into an olc::Decal* before returning. Decals live on the GPU.
 	auto To_Decal()->olc::Decal*;
 	auto Set_Width(int32_t width) -> void;
 
