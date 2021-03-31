@@ -25,7 +25,7 @@ public:
 
 	constexpr bool can_retry() const
 	{
-		return code == Code::MISSING_FILE;
+		return code == Code::MISSING_FILE == Code::MISSING_FILES;
 	}
 
 	constexpr const char* get_message() const

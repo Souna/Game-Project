@@ -1,24 +1,30 @@
 #pragma once
 #include <memory>
 #include "Error.h"
+#include "Constants.h"
 #include "SunNode.h"
 #include <string>
 #include <array>
 
 namespace sun_file
 {
-	constexpr uint8_t NUM_FILES = 1;
-
-	// SunFiles are referred to as 'nodes' because they themselves can be used like nodes.
-	// Probably because of the master SunDirectory lmao idk
-	// Base is our testing grounds and we're treating it as a SunNode =))))))))
+	// SunFiles are referred to as 'nodes'.
 	extern SunNode map;
 
-	constexpr std::array<const char*, NUM_FILES> filenames = { "map.sun" };
+	// List of all of the game files needed. If any of these files
+	// are not present, the initialization will return an error and 
+	// the game will not run.
+	constexpr std::array<const char*, constants::NUM_FILES> filenames = 
+	{ 
+		"map.sun",
+		"shit.sun"
+	};
 
-	// Initialize files before_ we can load them.
+	// Initialize files before we can load them.
+	// Does an integrity check on all files, as well.
+	// If any files are missing we return an error.
 	auto Init()->Error;
 
 	// Load all SunFiles.
-	auto Load_All_Files(const std::string& file_path) -> void; // -> trailing return type?
+	auto Load_All_Files(const std::string& file_path) -> void; // -> trailing return type
 }

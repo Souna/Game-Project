@@ -5,6 +5,7 @@
 namespace constants
 {
 	constexpr uint16_t TIMESTEP = 8;
+	constexpr uint8_t NUM_FILES = 2;
 
 	class Constants : public Singleton<Constants>
 	{
@@ -13,8 +14,8 @@ namespace constants
 
 		Constants()
 		{
-			VIEWWIDTH = 1440;	// 1024
-			VIEWHEIGHT = 720;	// 768
+			VIEWWIDTH = 1440;
+			VIEWHEIGHT = 720;
 		}
 
 		int16_t Get_View_Width()
@@ -40,5 +41,7 @@ namespace constants
 	private:
 		int16_t VIEWWIDTH;
 		int16_t VIEWHEIGHT;
+
+
 	};
 }
