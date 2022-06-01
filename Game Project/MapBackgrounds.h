@@ -49,10 +49,12 @@ namespace game
 		// Contains actual image.
 		Animation animation_;
 		bool animated_;
+		olc::Decal* d;
 
 		// Copy values.
 		int16_t copy_x_;
 		int16_t copy_y_;
+
 		// Parallax values.
 		double rotate_x_;
 		double rotate_y_;
@@ -76,9 +78,8 @@ namespace game
 	class MapBackgrounds
 	{
 	public:
-		MapBackgrounds(const char* path);
-		MapBackgrounds(SunNode src);
 		MapBackgrounds();
+		MapBackgrounds(SunNode src);
 
 		// Calls Draw() function of backgrounds.
 		void Draw_Backgrounds();

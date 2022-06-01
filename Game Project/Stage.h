@@ -25,9 +25,16 @@ namespace game
 		// Loads in tiles, backgrounds, physics, mapinfo, portals.
 		void Load_Map(int32_t map_id);
 
-		// Collection of backgrounds on the map.
-		MapBackgrounds backgrounds_;
+		enum State
+		{
+			INACTIVE,
+			TRANSITION,
+			ACTIVE
+		};
+
 		int32_t map_id_;
+		State state;
+
 		/*
 		Mobs object_;
 		BGM object_;
@@ -35,5 +42,8 @@ namespace game
 		Footholds object_;
 		Effects object_;
 		*/
+
+		// Collection of backgrounds on the map.
+		MapBackgrounds backgrounds_;
 	};
 }

@@ -40,6 +40,10 @@ namespace game
 				std::cout << str << std::endl;
 				printed.insert(str);
 			}
+			else if (printed.contains(str))
+			{
+				std::cout << str << std::endl;
+			}
 		}
 
 	private:

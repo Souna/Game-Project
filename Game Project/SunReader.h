@@ -17,7 +17,7 @@ class SunReader
 	struct SunHeader
 	{
 		int32_t end_of_data;
-		int32_t size = 0;	//header size or file size?
+		int32_t size = 0;
 		uint32_t factors[50] = { 0 }; //?
 		int32_t conclusion = -1;	//FFFF FFFF FFFF FFFF
 	};
@@ -30,8 +30,9 @@ public:
 	~SunReader();
 
 	// Header methods.
+	// Verifies that the header in the SunFiles is valid.
 	auto Valid() -> bool;
-	auto Compute_Offset() -> int;
+	auto Compute_Offset() -> int;	// Used for reading encrypted offsets.
 	SunHeader header_;
 
 	auto Read_Null_Terminated_String()->std::string;

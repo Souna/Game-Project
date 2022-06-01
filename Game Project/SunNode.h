@@ -14,18 +14,30 @@ class SunNode
 {
 public:
 	typedef std::pair<int32_t, int32_t> vector2i;
+
 	// Map of SunNodes.
 	typedef std::map<std::string, SunNode> SunNodes;
+
 	// Enum of the different property types in the file.
-	enum class NodeType
+	enum class SunPropertyType
 	{
-		NONE = 0,
+		NONE = 0,	// SunNullProperty
 		INTEGER = 1,
 		REAL = 2,
 		STRING = 3,
 		VECTOR = 4,
 		BITMAP = 5,
-		AUDIO = 6
+		AUDIO = 6,
+		SUBPROP = 7
+	};
+
+	enum class SunObjectType
+	{
+		NONE = 0,
+		FILE = 1,
+		IMAGE = 2,
+		DIRECTORY = 3,
+		PROPERTY = 4
 	};
 
 	SunNode() = default;
@@ -70,7 +82,9 @@ public:
 	operator std::string() const;
 	operator SunBitmap() const;
 	operator SunAudio();
+	operator vector2i();
 
+	// Property-returning methods.
 	auto Get_Integer(int64_t default_value = 0) const->int64_t;
 	auto Get_Real(double default_value = 0) const -> double;
 	auto Get_String(std::string default_str = "")const->std::string;
@@ -79,13 +93,16 @@ public:
 	auto Get_Audio()->SunAudio;
 	auto Get_Boolean(bool def = false) const -> bool;
 	auto Get_Children_Size()->int32_t;
-	// Returns the x-coordinate of the vector data value.
+
+	// Returns the x or y-coordinates of the Vector data value.
 	auto X() const->int32_t;
-	// Returns the y-coordinate of the vector data value.
 	auto Y() const->int32_t;
-	// Returns the name of the node.
+
+	// Returns the name of the node as a reference.
 	auto Name()->std::string&;
+
 	auto Get_Size() const->size_t;
+
 	// Returns the root node of the file this node was derived from.
 	auto Root()->SunNode&;
 
@@ -97,37 +114,44 @@ public:
 	// Computes file size.
 	auto Compute_End_Of_Data()->int32_t;
 	auto Query_Identity()->std::string;
-	auto Expand_Root(std::string name) -> bool;
+	auto Expand_Root() -> bool;
 	auto Try_Expand() -> void;
 	auto Get_Children(bool expand = true)->SunNodes&;
 	auto Children_Size() -> int;
 	auto Clear() -> void;
 	auto Exist(const std::string& name) -> bool;
 	// Sets the type of data the node will contain.
-	auto Set_Node_Type(NodeType type) -> void;
+	auto Set_Node_Type(SunPropertyType type) -> void;
 	// Gets the type of data contained within the node.
-	auto Get_Node_Type()->NodeType;
+	auto Get_Node_Type()->SunPropertyType;
 	auto Get_Parent()->SunNode*;
 	auto Set_Parent(SunNode* parent) -> void;
 	std::string identity_;
 
 private:
 	auto Expand_Node(int64_t offset, int64_t eob) -> bool;
+	auto Expand_Property() -> bool;
+	auto Expand_Extended_Property() -> bool;
+	auto Expand_Sub_Property() -> bool;
+	auto Expand_Canvas_Property() -> bool;
+	auto Expand_Vector_Property() -> bool;
+
+	friend std::ostream& operator<< (std::ostream& os, const SunNode& n);
+
+	// Trash
 	auto Expand_Shape_2dConvex2D(int64_t offset, int64_t eob) ->bool;
-	auto Expand_Shape_2dVector2D(int64_t offset) -> bool;
-	auto Expand_Sound_Dx8(int64_t offset, int64_t eob) -> bool;
-	auto Expand_Property(int64_t offset, uint32_t count) -> bool;
-	auto Expand_Image() -> bool;
+	auto Expand_Sound_Property(int64_t offset, int64_t eob) -> bool;
 
 	std::shared_ptr<SunReader> reader_;
 	SunNodes children_;
-	NodeType nodeType_ = NodeType::NONE;
+	SunPropertyType sunPropertyType_ = SunPropertyType::NONE;
 
-	int32_t type_ = 0;
+	SunObjectType sunObjectType_ = SunObjectType::NONE;
 	int32_t size_ = 0;
+	int32_t checksum_ = 0;
 	int64_t offset_ = 0;
 	Data data_;
-	int32_t children_size_ = 0;	// ?
+	int32_t children_size_ = 0;
 	SunNode* parent_ = nullptr;
 };
 

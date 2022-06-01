@@ -22,7 +22,14 @@ namespace game
 
 	void Stage::Load(int32_t map_id)
 	{
-		Load_Map(map_id);
+		state = State::INACTIVE;
+
+		switch (state)
+		{
+		case State::INACTIVE:
+			Load_Map(map_id);
+			break;
+		}
 	}
 
 	int32_t Stage::Get_Map_ID()
@@ -34,7 +41,8 @@ namespace game
 	{
 		Stage::map_id_ = map_id;
 
-		SunNode src = sun_file::map["Map"]["Map" + std::to_string(map_id)];
-		backgrounds_ = MapBackgrounds(src["back"]);//["Map.sun"]["Map"]["Map1"]["back"]
+		SunNode src = sun_file::test["Back"][std::to_string(map_id) + ".img"];
+
+		backgrounds_ = MapBackgrounds(src["Back"]);
 	}
 }

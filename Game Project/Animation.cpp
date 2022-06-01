@@ -12,8 +12,8 @@ namespace game
 		head_ = src["head"];
 		delay_ = src["delay"];	if (delay_ == 0) delay_ = 100;
 		// Learn about all this
-		bool has_a_0 = src["a0"].Get_Node_Type() == SunNode::NodeType::INTEGER;
-		bool has_a_1 = src["a1"].Get_Node_Type() == SunNode::NodeType::INTEGER;
+		bool has_a_0 = src["a0"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
+		bool has_a_1 = src["a1"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
 
 		if (has_a_0 && has_a_1)
 		{
@@ -34,8 +34,8 @@ namespace game
 			opacities_ = { 255, 255 };
 		}
 
-		bool has_z_0 = src["z0"].Get_Node_Type() == SunNode::NodeType::INTEGER;
-		bool has_z_1 = src["z1"].Get_Node_Type() == SunNode::NodeType::INTEGER;
+		bool has_z_0 = src["z0"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
+		bool has_z_1 = src["z1"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
 
 		if (has_z_0 && has_z_1)
 			scales_ = { src["z0"], src["z1"] };
@@ -111,8 +111,7 @@ namespace game
 
 	Animation::Animation(SunNode src)
 	{
-		bool is_texture = src.Get_Node_Type() == SunNode::NodeType::BITMAP;
-		std::map<std::string, SunNode>::iterator iter;
+		bool is_texture = src.Get_Node_Type() == SunNode::SunPropertyType::BITMAP;
 
 		if (is_texture)
 		{
@@ -121,17 +120,6 @@ namespace game
 		else
 		{
 			std::set<int16_t> frame_ids;
-
-			// WTF IS THIS FUCKNIG SHIT
-			for (iter = src.begin(); iter != src.end(); iter++)
-			{
-				if (src.Get_Child(iter->first.c_str()).Get_Node_Type() == SunNode::NodeType::BITMAP)
-				{
-					int16_t frame_id = string_conversion::Or_Default<int16_t>(iter->first.c_str(), -1);
-					if (frame_id >= 0)
-						frame_ids.insert(frame_id);
-				}
-			}
 
 			for (auto& id : frame_ids)
 			{

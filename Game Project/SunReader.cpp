@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <limits.h>
-#include <windows.h>
+#include <Windows.h>
 
 // i am so stupid and idk what this USE_MMAP stuff is for
 SunReader::SunReader(const std::string& p) : length_(0), position_(0), file_(nullptr), path_(p)
@@ -40,18 +40,15 @@ SunReader::~SunReader()
 
 auto SunReader::Valid() -> bool
 {
-	// Why should the file be >= 64?
-	if (Get_Length() >= 64)
+	if (Get_Length() >= 156)
 	{
-		// Read file identifier. int32_t is good enough for PKG1 (wzfile identifier)
-		// but my SunFile identifier - SUNFILE :) - is 10 bytes.
-		//int signature = Read<int32_t>();
+		// Read file identifier.
 		uint64_t signature = Read<uint64_t>();
-		// Skip ASCII (112 bytes)
+		// Skip sun ASCII art (112 bytes)
 		Set_Position(Get_Position() + 112);
 		// Read file size from header.
 		uint64_t file_size = Read<uint64_t>();
-		// Read file start (header size).
+		// Read file start (aka header size).
 		uint32_t header_size = Read<uint32_t>();
 		// Read copyright string
 		std::string copyright = Read_Null_Terminated_String();
@@ -60,8 +57,9 @@ auto SunReader::Valid() -> bool
 		if (0x616e756f536e7553 == signature && Get_Length() == file_size + header_size)
 		{
 			header_.size = header_size;
+			return true;
 		}
-		return true;
+		return false;
 	}
 	return false;
 }
@@ -243,9 +241,10 @@ auto SunReader::Read_Compressed_Int() -> int32_t
 
 auto SunReader::Read_Compressed_Float() -> float
 {
-	int8_t value = Read<int8_t>();
-	if (value == SCHAR_MIN)
-		return Read<float>();
+	//int8_t value = Read<int8_t>();
+	float value = Read<float>();
+	//if (value == SCHAR_MIN)
+	//	return Read<float>();
 	return value;
 }
 
@@ -266,8 +265,8 @@ auto SunReader::Set_Position(int64_t position) -> bool
 	}
 	else if (position == length_)
 	{
-		game::Console::Get().Print(__func__, "Set position to very end of file. No more to go over.");
-		return false;
+		//game::Console::Get().Print(__func__, "Set position to very end of file. No more to go over.");
+		//return false;
 	}
 	offset_ = base_ + position;
 	this->position_ = position;

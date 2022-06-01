@@ -8,16 +8,16 @@
 
 namespace sun_file
 {
-	// SunFiles are referred to as 'nodes'.
-	extern SunNode map;
+	extern SunNode test;
+
+	constexpr uint8_t NUM_FILES = 1;
 
 	// List of all of the game files needed. If any of these files
-	// are not present, the initialization will return an error and 
+	// are not present, the initialization will return an error and
 	// the game will not run.
-	constexpr std::array<const char*, constants::NUM_FILES> filenames = 
-	{ 
-		"map.sun",
-		"shit.sun"
+	constexpr std::array<const char*, constants::NUM_FILES> filenames =
+	{
+		"test.sun",
 	};
 
 	// Initialize files before we can load them.

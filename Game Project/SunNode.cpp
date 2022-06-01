@@ -1,3 +1,4 @@
+#include "Console.h"
 #include "SunNode.h"
 #include "SunBitmap.h"
 #include "SunReader.h"
@@ -6,7 +7,7 @@
 #include <vector>
 #include <sstream>
 
-SunNode::SunNode(const std::shared_ptr<SunReader>& reader) : nodeType_(NodeType::NONE), parent_(nullptr)
+SunNode::SunNode(const std::shared_ptr<SunReader>& reader) : sunPropertyType_(SunPropertyType::NONE), parent_(nullptr)
 {
 	this->reader_ = reader;
 	children_size_ = 0;
@@ -23,7 +24,7 @@ SunNode::SunNode(const std::shared_ptr<SunReader>& reader, SunNode* node) : pare
 auto SunNode::Load(const std::shared_ptr<SunReader>& reader) -> void
 {
 	parent_ = nullptr;
-	nodeType_ = NodeType::NONE;
+	sunPropertyType_ = SunPropertyType::NONE;
 	this->reader_ = reader;
 	children_size_ = 0;
 	offset_ = 0;
@@ -199,24 +200,29 @@ SunNode::operator SunAudio()
 	return Get_Audio();
 }
 
+SunNode::operator vector2i()
+{
+	return Get_Vector();
+}
+
 auto SunNode::Get_Integer(int64_t default_value) const -> int64_t
 {
 	if (!data_.use) return default_value;
-	switch (nodeType_)
+	switch (sunPropertyType_)
 	{
-	case SunNode::NodeType::NONE:
+	case SunNode::SunPropertyType::NONE:
 		break;
-	case SunNode::NodeType::INTEGER:
+	case SunNode::SunPropertyType::INTEGER:
 		return data_.intreal;
-	case SunNode::NodeType::REAL:
+	case SunNode::SunPropertyType::REAL:
 		return static_cast<int64_t>(data_.doublereal);
-	case SunNode::NodeType::STRING:
+	case SunNode::SunPropertyType::STRING:
 		return std::stoll(data_.str);
-	case SunNode::NodeType::VECTOR:
+	case SunNode::SunPropertyType::VECTOR:
 		break;
-	case SunNode::NodeType::BITMAP:
+	case SunNode::SunPropertyType::BITMAP:
 		break;
-	case SunNode::NodeType::AUDIO:
+	case SunNode::SunPropertyType::AUDIO:
 		break;
 	default:
 		break;
@@ -227,21 +233,21 @@ auto SunNode::Get_Integer(int64_t default_value) const -> int64_t
 auto SunNode::Get_Real(double defaultValue) const -> double
 {
 	if (!data_.use) return defaultValue;
-	switch (nodeType_)
+	switch (sunPropertyType_)
 	{
-	case SunNode::NodeType::NONE:
+	case SunNode::SunPropertyType::NONE:
 		break;
-	case SunNode::NodeType::INTEGER:
+	case SunNode::SunPropertyType::INTEGER:
 		return static_cast<double>(data_.intreal);
-	case SunNode::NodeType::REAL:
+	case SunNode::SunPropertyType::REAL:
 		return data_.doublereal;
-	case SunNode::NodeType::STRING:
+	case SunNode::SunPropertyType::STRING:
 		return std::stod(data_.str);	//Converts char sequence to double
-	case SunNode::NodeType::VECTOR:
+	case SunNode::SunPropertyType::VECTOR:
 		break;
-	case SunNode::NodeType::BITMAP:
+	case SunNode::SunPropertyType::BITMAP:
 		break;
-	case SunNode::NodeType::AUDIO:
+	case SunNode::SunPropertyType::AUDIO:
 		break;
 	default:
 		break;
@@ -251,15 +257,20 @@ auto SunNode::Get_Real(double defaultValue) const -> double
 
 auto SunNode::Get_String(std::string default_str) const -> std::string
 {
+	// Could make changes here to print strings for all node types.
+	// If node data isn't able to be converted to string, just print the name of the node.
 	if (!data_.use) return default_str;
-	switch (nodeType_)
+	switch (sunPropertyType_)
 	{
-	case SunNode::NodeType::INTEGER:
+	case SunNode::SunPropertyType::INTEGER:
 		return std::to_string(data_.intreal);
-	case SunNode::NodeType::REAL:
-		return std::to_string(static_cast<int64_t>(data_.doublereal));
-	case SunNode::NodeType::STRING:
+	case SunNode::SunPropertyType::REAL:
+		//return std::to_string(static_cast<int64_t>(data_.doublereal));
+		return std::to_string(data_.doublereal);
+	case SunNode::SunPropertyType::STRING:
 		return data_.str;
+	case SunNode::SunPropertyType::VECTOR:
+		return "(" + std::to_string(data_.vector[0]) + ", " + std::to_string(data_.vector[1]) + ")";
 	}
 	return default_str;
 }
@@ -281,7 +292,7 @@ auto SunNode::Get_Audio() -> SunAudio
 
 auto SunNode::Get_Boolean(bool def) const -> bool
 {
-	return (data_.use && nodeType_ == NodeType::INTEGER) ? (Get_Integer() == 1 ? true : false) : def;
+	return (data_.use && sunPropertyType_ == SunPropertyType::INTEGER) ? (Get_Integer() == 1 ? true : false) : def;
 }
 
 auto SunNode::Get_Children_Size() ->int32_t
@@ -292,12 +303,12 @@ auto SunNode::Get_Children_Size() ->int32_t
 
 auto SunNode::X() const -> int32_t
 {
-	return data_.use && nodeType_ == NodeType::VECTOR ? data_.vector[0] : 0;
+	return data_.use && sunPropertyType_ == SunPropertyType::VECTOR ? data_.vector[0] : 0;
 }
 
 auto SunNode::Y() const -> int32_t
 {
-	return  data_.use && nodeType_ == NodeType::VECTOR ? data_.vector[1] : 0;
+	return  data_.use && sunPropertyType_ == SunPropertyType::VECTOR ? data_.vector[1] : 0;
 }
 
 auto SunNode::Name() -> std::string&
@@ -316,10 +327,20 @@ auto SunNode::Root()-> SunNode&
 	{
 		reader_->Set_Position(reader_->header_.size);
 		reader_->header_.end_of_data = Compute_End_Of_Data();
-		reader_->Set_Position(reader_->header_.size);	//would be +2 for (short) version
-		Expand_Root(identity_);
+		reader_->Set_Position(reader_->header_.size);
+		Expand_Root();
+		return *this;
 	}
-	return *this;
+	else
+	{
+		game::Console::Get().Print(__func__, reader_.get()->Get_File_Path() + " is invalid.");
+		std::cout << "Enter 'r' to retry." << std::endl << std::endl;
+
+		std::string cmd;
+		std::cin >> cmd;
+		if (cmd == "r")
+			Window::Get().OnUserCreate();
+	}
 }
 
 auto SunNode::Resolve(const char* path) -> SunNode&
@@ -368,19 +389,19 @@ auto SunNode::Resolve(bool expandZero) ->SunNode&
 		root = &root->Get_Child(s.c_str());
 	}
 
-	if (root->nodeType_ == NodeType::NONE && expandZero)
+	if (root->sunPropertyType_ == SunPropertyType::NONE && expandZero)
 	{
 		root = &root->Get_Child("0");
 	}
 
-	nodeType_ = root->nodeType_;
+	sunPropertyType_ = root->sunPropertyType_;
 	data_ = root->data_;
 	offset_ = root->offset_;
 	parent_ = root->parent_;
 	identity_ = root->identity_;
 	children_size_ = root->children_size_;
-	type_ = root->type_;
-	//	size = root->size;
+	sunObjectType_ = root->sunObjectType_;
+	size_ = root->size_;	//this was commented
 	children_ = root->children_;
 	reader_->Set_Position(offset_);
 	return *this;
@@ -392,6 +413,10 @@ auto SunNode::Get_Child(const char* name) -> SunNode&
 	auto Resolve_Node = [&](SunNode& node) -> SunNode&
 	{
 		node.parent_ = this;
+		//if (node.Get_Node_Type() == SunNode::SunPropertyType::UOL)
+		//{
+		//	node.Resolve();
+		//}
 		return node;
 	};
 	if (iter == children_.end())
@@ -413,18 +438,23 @@ auto SunNode::Find(const std::string& name) -> SunNodes::iterator
 
 auto SunNode::Compute_End_Of_Data() -> int32_t
 {
-	for (int count = reader_->Read_Compressed_Int(); count > 0; --count)
+	// What is the expected result here? To get to the end of file? Or stop at end of first directory?
+	// Test using WZ files.
+	// Read top-level SunDirectory + img count
+	int children = 0;
+	for (int entryCount = reader_->Read_Compressed_Int(); entryCount > 0; --entryCount)
 	{
 		switch (reader_->Read_Byte())
 		{
 		case 1:	// File
 			reader_->Read_String(reader_->header_.size + 1 + reader_->Read_Int());
 			break;
-		case 2:	// SunDirectory
+		case 2:	// SunImage
 			reader_->Read_String();
 			break;
-		case 3: // Image (not wzimage but like literal png)
+		case 3: // SunDirectory
 			reader_->Read_String();
+			++children;
 			break;
 		case 4:	// SunProperty
 			reader_->Read_String();
@@ -432,12 +462,44 @@ auto SunNode::Compute_End_Of_Data() -> int32_t
 		default: return 0;
 		}
 		reader_->Read_Compressed_Int();	// Read compressed size
-		reader_->Read_Int();			// Read compressed offset
+		reader_->Read_Compressed_Int();	// Read compressed checksum
+		reader_->Read_UInt();			// Read compressed offset
 	}
+
+	while (0 < children--)
+		Compute_End_Of_Data();
+
+	return (int)reader_->Get_Position();
+
+	//int children = 0;
+	//// Read top-level SunDirectory + img count
+	//for (int count = reader_->Read_Compressed_Int(); count > 0; --count)
+	//{
+	//	switch (reader_->Read_Byte())
+	//	{
+	//	case 1:	// File
+	//		reader_->Read_String(reader_->header_.size + 1 + reader_->Read_Int());
+	//		break;
+	//	case 2:	// SunImage
+	//		reader_->Read_String();
+	//		break;
+	//	case 3: // SunDirectory
+	//		reader_->Read_String();
+	//		break;
+	//	case 4:	// SunProperty
+	//		reader_->Read_String();
+	//		break;
+	//	default: return 0;
+	//	}
+	//	reader_->Read_Compressed_Int();	// Read compressed size
+	//	reader_->Read_Compressed_Int();	// Read compressed checksum
+	//	reader_->Read_UInt();			// Read compressed offset
+	//	//children = reader_->Read_Byte();	// Read entry count
+	//}
 
 	//while (0 < children--)
 	//	Compute_End_Of_Data();
-	return (int)reader_->Get_Position();
+	//return (int)reader_->Get_Position();
 }
 
 auto SunNode::Query_Identity() -> std::string
@@ -475,7 +537,7 @@ auto SunNode::Query_Identity() -> std::string
 	return "";
 }
 
-auto SunNode::Expand_Root(std::string name) -> bool
+auto SunNode::Expand_Root() -> bool
 {
 	std::list<SunNode> nodes;
 	children_size_ = reader_->Read_Compressed_Int();
@@ -485,12 +547,21 @@ auto SunNode::Expand_Root(std::string name) -> bool
 		byte type = reader_->Read_Byte();
 		switch (type)
 		{
-		case 1: case 2:	// File / Directory
+		case 1: // File
 			//identity = reader_->Read_Decrypt_String(reader_->header_.size + 1 + reader_->Read_Int());
 			identity = reader_->Read_String();
 			break;
-		case 3: case 4:	// Image(png) / Property
+		case 2:	//SunImage
+			identity = reader_->Read_String();
+			break;
+		case 3:	//SunDirectory
+			identity = reader_->Read_String();
+			break;
+		case 4:	//Property
 			//identity = reader_->Read_Decrypt_String();
+			//reader_->Set_Position(reader_->Get_Position() + 1);
+			//identity = reader_->Read_String();
+			//break;
 			identity = reader_->Read_String();
 			break;
 		default:
@@ -498,21 +569,33 @@ auto SunNode::Expand_Root(std::string name) -> bool
 		}
 
 		int32_t size = reader_->Read_Compressed_Int();
+		int32_t checksum = reader_->Read_Compressed_Int();
 		int32_t offset = reader_->Read_UInt();
 
 		nodes.emplace_back(SunNode(reader_, this));
 		SunNode& node = nodes.back();
 		node.identity_ = identity;
-		node.type_ = type;
+		node.sunObjectType_ = (SunObjectType)type;
 		node.size_ = size;
+		node.checksum_ = checksum;
 		node.offset_ = offset;
 	}
-	for (auto& a : nodes) {
+	for (auto& a : nodes)
+	{
 		std::string& name = a.identity_;
 
-		if (a.type_ == 1)	//SunFile
+		//if (0 != a.sunObjectType_ % 2)
+		//{//folder
+		//	//a.;
+		//	children_.emplace(name, std::move(a)).first->second.Expand_Root();
+		//}
+		//else
+		//{
+		//	children_.emplace(name, std::move(a));
+		//}
+		if (a.sunObjectType_ == SunObjectType::FILE || a.sunObjectType_ == SunObjectType::DIRECTORY)
 		{
-			children_.emplace(name, std::move(a)).first->second.Expand_Root(a.identity_);
+			children_.emplace(name, std::move(a)).first->second.Expand_Root();
 		}
 		else
 		{
@@ -562,14 +645,14 @@ auto SunNode::Exist(const std::string& name) -> bool
 	return Find(name) != end();
 }
 
-auto SunNode::Set_Node_Type(NodeType type) -> void
+auto SunNode::Set_Node_Type(SunPropertyType type) -> void
 {
-	this->nodeType_ = type;
+	this->sunPropertyType_ = type;
 }
 
-auto SunNode::Get_Node_Type() -> NodeType
+auto SunNode::Get_Node_Type() -> SunPropertyType
 {
-	return nodeType_;
+	return sunPropertyType_;
 }
 
 auto SunNode::Get_Parent() -> SunNode*
@@ -582,21 +665,26 @@ auto SunNode::Set_Parent(SunNode* parent) -> void
 	this->parent_ = parent;
 }
 
-auto SunNode::Expand_Node(int64_t offset, int64_t eob) -> bool
+auto SunNode::Expand_Node(int64_t offset, int64_t end_of_block) -> bool
 {
+	// in WzTools this method is for extended properties.
+	//
+	//
+	//
 	//std::string type = reader_->Transit_String(offset); // Reads the "Property" string preceding property info in .wz files
 	//int index = sun_tools::GetIndexFromTypes(type);	// Type index (WzObject Type)
 	//bool ret = false;
 	//switch (index)
 	//{
 	//case 0:  ret = Expand_Shape_2dConvex2D(offset, eob); break;
-	//case 1:  ret = Expand_Shape_2dVector2D(offset); break;
-	//case 2:  ret = Expand_Sound_Dx8(offset, eob); break;
+	//case 1:  ret = Expand_Vector(offset); break;
+	//case 2:  ret = Expand_Sound_Property(offset, eob); break;
 	//case 3:  ret = Expand_Property(offset); break;
 	//case 4:  ret = Expand_Image(offset); break;
 	//default: break;
 	//}
-	uint32_t count = reader_->Read_Compressed_Int();	// Read property count.
+
+	//reader_->Set_Position(reader_->Get_Position() + 1);
 	bool ret = false;
 	int type = reader_->Read_Byte();	// Read SunObjectType.
 	switch (type)
@@ -605,16 +693,153 @@ auto SunNode::Expand_Node(int64_t offset, int64_t eob) -> bool
 		ret = false;
 		break;
 	case 2:	// Directory
-		ret = false;
-		break;
-	case 3:	// Image (png)
-		ret = false;
+		ret = Expand_Root();
 		break;
 	case 4:	// Property
-		ret = Expand_Property(offset, count);
+		ret = Expand_Property();
 		break;
 	}
 	return ret;
+}
+
+auto SunNode::Expand_Property() -> bool	//ParsePropertyList
+{
+	int count = reader_->Read_Compressed_Int();
+	children_size_ = count;
+	for (int index = 0; index < count; ++index)
+	{
+		//std::string identity = reader_->Transit_String(offset);
+		std::string identity = reader_->Read_String();
+		byte type = reader_->Read_Byte();
+		int64_t position = reader_->Get_Position();
+		SunNode& n = children_.emplace(identity,
+			SunNode(reader_, this)
+		).first->second;
+		n.data_.use = true;
+		n.identity_ = identity;
+		n.offset_ = position;
+		n.sunObjectType_ = SunObjectType::PROPERTY;
+
+		switch (type)
+		{
+		case 0x00: case 0x01:	// SunNullProperty
+			n.sunPropertyType_ = SunPropertyType::NONE;
+			n.data_.use = false;
+			break;
+
+		case 0x02:	// SunShortProperty
+			n.sunPropertyType_ = SunPropertyType::INTEGER;
+			n.data_.intreal = reader_->Read_Short();
+			break;
+
+		case 0x03:	// SunIntProperty
+			n.sunPropertyType_ = SunPropertyType::INTEGER;
+			n.data_.intreal = reader_->Read_Compressed_Int();
+			break;
+
+		case 0x04:	// SunLongProperty
+			n.sunPropertyType_ = SunPropertyType::INTEGER;
+			n.data_.intreal = reader_->Read_Compressed_Long();
+			break;
+
+		case 0x05:	// SunFloatProperty
+			n.sunPropertyType_ = SunPropertyType::REAL;
+			n.data_.doublereal = reader_->Read_Compressed_Float();
+			break;
+
+		case 0x06:	// SunDoubleProperty
+			n.sunPropertyType_ = SunPropertyType::REAL;
+			n.data_.doublereal = reader_->Read_Double();
+			break;
+
+		case 0x07:	// SunStringProperty
+			n.sunPropertyType_ = SunPropertyType::STRING;
+			n.data_.str = reader_->Read_String();
+			break;
+
+		case 0x0C:	// SunPropertyExtended (Extended Properties - Canvas/Vector/Sound/Sub)
+		{
+			n.data_.use = false;
+			int64_t end_of_block = reader_->Read_UInt() + reader_->Get_Position();
+			n.Expand_Extended_Property();
+			if (reader_->Get_Position() != end_of_block)
+				reader_->Set_Position(end_of_block);
+			break;
+		}
+
+		default:
+			game::Console::Get().Print(__func__, "Error occured in switch statement.");
+			break;
+			//case 0x08:	// IMAGE/BITMAP
+			//	//int length = reader_->Read_Int();
+			//	reader_->Set_Position(reader_->Get_Position() + sizeof(int));
+			//	n.Expand_Canvas_Property();
+			//	break;
+			//case 0x09:	// VECTOR
+			//	n.sunPropertyType_ = SunPropertyType::VECTOR;
+			//	n.Expand_Vector_Property();
+			//	break;
+		}
+	}
+	return true;
+}
+
+auto SunNode::Expand_Extended_Property() -> bool
+{
+	byte type = reader_->Read_Byte();
+	bool ret = false;
+	switch (type)
+	{
+	case 8:
+		ret = Expand_Canvas_Property();
+		break;
+	case 9:
+		ret = Expand_Vector_Property();
+		break;
+	case 10:
+		//ret = Expand_Sound_Property();
+		break;
+	case 11:
+		ret = Expand_Sub_Property();
+		break;
+	default:
+		game::Console::Get().Print(__func__, "Error occured in switch statement.");
+		break;
+	}
+
+	return ret;
+}
+
+auto SunNode::Expand_Sub_Property() -> bool
+{
+	sunPropertyType_ = SunPropertyType::SUBPROP;
+	reader_->Set_Position(reader_->Get_Position() + 1);	// Skip PropertyListHeader
+	Expand_Property();
+	return true;
+}
+
+auto SunNode::Expand_Canvas_Property() -> bool
+{
+	sunPropertyType_ = SunPropertyType::BITMAP;
+	if (reader_->Read_Byte() == 1)	// Canvas has properties.
+	{
+		reader_->Set_Position(reader_->Get_Position() + 1);	// Skip PropertyListHeader
+		if (!Expand_Property())
+			return false;
+	}
+
+	int32_t width = reader_->Read_Compressed_Int();
+	int32_t height = reader_->Read_Compressed_Int();
+	int64_t offset = reader_->Get_Position();
+	int32_t size = reader_->Read_Int();
+
+	data_.use = true;
+	data_.bitmap.length = size;
+	data_.bitmap.offset = static_cast<uint32_t>(offset);
+	data_.bitmap.width = width;
+	data_.bitmap.height = height;
+	reader_->Set_Position(reader_->Get_Position() + size);
+	return true;
 }
 
 auto SunNode::Expand_Shape_2dConvex2D(int64_t offset, int64_t eob) -> bool
@@ -626,24 +851,24 @@ auto SunNode::Expand_Shape_2dConvex2D(int64_t offset, int64_t eob) -> bool
 	return true;
 }
 
-auto SunNode::Expand_Shape_2dVector2D(int64_t offset) -> bool
+auto SunNode::Expand_Vector_Property() -> bool
 {
+	sunPropertyType_ = SunPropertyType::VECTOR;
 	int x = reader_->Read_Compressed_Int();
 	int y = reader_->Read_Compressed_Int();
-	Set_Node_Type(NodeType::VECTOR);
 	data_.use = true;
 	data_.vector[0] = x;
 	data_.vector[1] = y;
 	return true;
 }
 
-auto SunNode::Expand_Sound_Dx8(int64_t offset, int64_t eob) -> bool
+auto SunNode::Expand_Sound_Property(int64_t offset, int64_t eob) -> bool
 {
+	sunPropertyType_ = SunPropertyType::AUDIO;
 	int unknow = reader_->Read_Byte();// Always 0
 	int size = reader_->Read_Compressed_Int(); //+ 82u;//?
 	int unknow1 = reader_->Read_Compressed_Int();
 	reader_->Set_Position(reader_->Get_Position() + 51);
-	nodeType_ = NodeType::AUDIO;
 	data_.use = true;
 	data_.audio.offset = static_cast<uint32_t>(eob - size);
 	data_.audio.length = size;
@@ -652,118 +877,10 @@ auto SunNode::Expand_Sound_Dx8(int64_t offset, int64_t eob) -> bool
 	return true;
 }
 
-auto SunNode::Expand_Property(int64_t offset, uint32_t count) -> bool
+std::ostream& operator<<(std::ostream& os, const SunNode& n)
 {
-	//children_size_ = count;
-	for (int index = 0; index < count; ++index)
-	{
-		//std::string identity = reader_->Transit_String(offset);
-		std::string identity = reader_->Read_String();
-		byte type = reader_->Read_Byte();
-		int64_t position = reader_->Get_Position();	// Add image size to after SunPropertyType. in wz there are 2 and they're different?
-		SunNode& n = children_.emplace(identity,
-			SunNode(reader_, this)
-		).first->second;
-		n.data_.use = true;
-		n.identity_ = identity;
-		n.offset_ = position;
-
-		switch (type)
-		{
-		case 0x00: case 0x01:	// NULL
-			n.nodeType_ = NodeType::NONE;
-			n.data_.use = false;
-			break;
-		case 0x02:	// SHORT
-			n.nodeType_ = NodeType::INTEGER;
-			n.data_.intreal = reader_->Read_Short();
-			break;
-		case 0x03:	// INT
-			n.nodeType_ = NodeType::INTEGER;
-			n.data_.intreal = reader_->Read_Compressed_Int();
-			break;
-		case 0x04:	// LONG
-			n.nodeType_ = NodeType::INTEGER;
-			n.data_.doublereal = reader_->Read_Compressed_Long();
-			break;
-		case 0x05:	// FLOAT
-			n.nodeType_ = NodeType::REAL;
-			n.data_.doublereal = reader_->Read_Compressed_Float();
-			break;
-		case 0x06:	// DOUBLE
-			n.nodeType_ = NodeType::REAL;
-			n.data_.doublereal = reader_->Read_Double();
-			break;
-		case 0x07:	// STRING
-			n.nodeType_ = NodeType::STRING;
-			n.data_.str = reader_->Read_String();
-		case 0x08:	// IMAGE/BITMAP
-			int length = reader_->Read_Int();
-			//int64_t end_of_bytes = length + reader_->Get_Position();
-			n.Expand_Image();
-			//n.nodeType_ = NodeType::BITMAP;
-			//n.data_.str = reader_->Read_String();
-			break;
-			//case 0x00:
-			//	n.nodeType_ = NodeType::NONE;
-			//	n.data_.use = false;
-			//	break;
-			//case 0x02: case 0x0b:
-			//	n.nodeType_ = NodeType::INTEGER;
-			//	n.data_.intreal = reader_->Read_Short();
-			//	break;
-			//case 0x03: case 0x13:
-			//	n.nodeType_ = NodeType::INTEGER;
-			//	n.data_.intreal = reader_->Read_Compressed_Int();
-			//	break;
-			//case 0x04:
-			//	n.nodeType_ = NodeType::REAL;
-			//	n.data_.doublereal = reader_->Read_Compressed_Float();
-			//	break;
-			//case 0x05:
-			//	n.nodeType_ = NodeType::REAL;
-			//	n.data_.doublereal = reader_->Read_Double();
-			//	break;
-			//case 0x08:
-			//	n.nodeType_ = NodeType::STRING;
-			//	n.data_.str = reader_->Transit_String(offset);
-			//	break;
-			//case 0x14:
-			//	n.nodeType_ = NodeType::INTEGER;
-			//	n.data_.intreal = reader_->Read_Compressed_Long();
-			//	break;
-			//case 0x09:
-			//	n.data_.use = false;
-			//	// Position of the next piece;
-			//	int read = reader_->Read_Int();
-			//	int64_t eob = read + reader_->Get_Position();
-			//	n.Expand_Node(offset, eob);
-			//	reader_->Set_Position(eob); // Restore location;
-			//	break;
-		}
-	}
-	return true;
-}
-
-auto SunNode::Expand_Image() -> bool
-{
-	if (reader_->Read_Byte() == 1)	// Image has properties.
-		//if (!Expand_Property(offset))
-		return false;
-
-	int32_t width = reader_->Read_Compressed_Int();
-	int32_t height = reader_->Read_Compressed_Int();
-	int32_t size = reader_->Read_Int();
-	int64_t offset = reader_->Get_Position();
-
-	nodeType_ = NodeType::BITMAP;
-	data_.use = true;
-	data_.bitmap.length = size;
-	data_.bitmap.offset = static_cast<uint32_t>(offset);
-	data_.bitmap.width = width;
-	data_.bitmap.height = height;
-	reader_->Set_Position(reader_->Get_Position() + size);
-	return true;
+	os << n.Get_String();
+	return os;
 }
 
 auto operator+(std::string s, SunNode& node) -> std::string

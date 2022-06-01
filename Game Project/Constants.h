@@ -5,7 +5,7 @@
 namespace constants
 {
 	constexpr uint16_t TIMESTEP = 8;
-	constexpr uint8_t NUM_FILES = 2;
+	constexpr uint8_t NUM_FILES = 1;
 
 	class Constants : public Singleton<Constants>
 	{

@@ -2,6 +2,7 @@
 
 #include "Range.h";
 #include <cstdint>
+#include "SunNode.h"
 
 namespace game
 {
@@ -15,9 +16,7 @@ namespace game
 	class Foothold
 	{
 	public:
-		//Foothold::Foothold(nl::node src, uint16_t id, uint8_t layer);
-		Foothold(uint16_t id, uint16_t previous, uint16_t next, uint8_t layer);
-		Foothold(uint16_t id, uint16_t previous, uint16_t next, uint8_t layer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, bool display_handles = false);
+		Foothold(SunNode src, uint16_t id, uint8_t layer, bool anchors);
 		Foothold();
 
 		// Returns the individual ID of this foothold.
@@ -87,8 +86,8 @@ namespace game
 		// Returns a y-coordinate right below the given x-coordinate.
 		double Find_Ground_Below(double x) const;
 
-		// Display draggable foothold handles.
-		bool Show_Draggable_Handles() const;
+		// Display draggable foothold anchors.
+		bool Show_Draggable_Anchors() const;
 		// TODO: Make FH handles into their own class.
 
 	private:
@@ -100,6 +99,6 @@ namespace game
 		Range<int16_t> horizontal_range_;
 		Range<int16_t> vertical_range_;
 
-		bool show_draggable_handles_;
+		bool show_draggable_anchors_;
 	};
 }
