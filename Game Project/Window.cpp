@@ -46,7 +46,7 @@ bool Window::OnUserCreate()
 	}
 	// No init errors, continue.
 
-	game::Stage::Get().Load(1);
+	game::Stage::Get().Load(1);	//loads 1.img. Temporary test map ID.
 
 	return true;
 }

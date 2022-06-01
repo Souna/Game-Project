@@ -2,16 +2,15 @@
 
 namespace game
 {
-	// This commented constructor implies I have a node parameter supplying all the information I need
-	// in relation to footholds on the map.
-	//Foothold::Foothold(nl::node src, uint16_t id, uint8_t ly) : m_prev(src["prev"]), next_(src["next"]), horizontal_range_(src["x1"], src["x2"]), vertical_range_(src["y1"], src["y2"]), m_id(id), layer_(ly) {}
-	Foothold::Foothold(uint16_t id, uint16_t previous, uint16_t next, uint8_t layer) : id_(id), previous_(previous), next_(next), layer_(layer) {};
+	Foothold::Foothold(SunNode src, uint16_t id, uint8_t layer, bool anchors) :
+		previous_(src["prev"]),
+		next_(src["next"]),
+		horizontal_range_(src["x1"], src["x2"]),
+		vertical_range_(src["y1"], src["y2"]),
+		id_(id),
+		layer_(layer),
+		show_draggable_anchors_(anchors) {};
 
-	Foothold::Foothold(uint16_t id, uint16_t previous, uint16_t next, uint8_t layer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, bool handles)
-		: id_(id), previous_(previous), next_(next), layer_(layer), horizontal_range_(x1, x2), vertical_range_(y1, y2)
-	{
-		show_draggable_handles_ = handles;
-	};
 	Foothold::Foothold() : id_(0), previous_(0), next_(0), layer_(0) {}
 
 	uint16_t Foothold::Id() const
@@ -175,8 +174,8 @@ namespace game
 	//	vertical_range_.second = y2;
 	//}
 
-	bool Foothold::Show_Draggable_Handles() const
+	bool Foothold::Show_Draggable_Anchors() const
 	{
-		return show_draggable_handles_;
+		return show_draggable_anchors_;
 	}
 }

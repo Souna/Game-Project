@@ -6,7 +6,7 @@ namespace game
 {
 	Texture::Texture(SunNode src)
 	{
-		if (src.Get_Node_Type() == SunNode::NodeType::BITMAP)
+		if (src.Get_Node_Type() == SunNode::SunPropertyType::BITMAP)
 		{
 			origin_ = src["origin"];
 			std::string source = src["source"];

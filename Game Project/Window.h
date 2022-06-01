@@ -3,7 +3,6 @@
 #include "Singleton.h"
 #include "Error.h"
 
-// Window derives from PixelGameEngine as well as Singleton. Does this even make sense?
 class Window : public olc::PixelGameEngine, public Singleton<Window>
 {
 public:

@@ -65,12 +65,11 @@ auto SunBitmap::Data() -> std::vector<uint8_t>&
 
 	input_.resize(biggest);
 	output.resize(biggest);
-	reader_->Set_Position(offset_);
-	buffer_ = reader_->Get_Offset(offset_);
+	//reader_->Set_Position(offset_);
+	buffer_ = reader_->Get_Offset(offset_ + 4);	// Skips image data size and puts us at 78 9C
 
 	const uint8_t* original = reinterpret_cast<uint8_t const*>(buffer_);
 	auto decompressed = 0;
-
 	auto decompress = [&]
 	{
 		z_stream strm = {};
@@ -82,7 +81,10 @@ auto SunBitmap::Data() -> std::vector<uint8_t>&
 		auto err = inflate(&strm, Z_FINISH);
 		if (err != Z_BUF_ERROR)
 		{
-			if (err != Z_DATA_ERROR) { std::cerr << "zlib error of " << std::dec << err << std::endl; }
+			if (err != Z_DATA_ERROR)
+			{
+				std::cerr << "zlib error of " << std::dec << err << std::endl;
+			}
 			return false;
 		}
 		decompressed = static_cast<int32_t>(strm.total_out);
