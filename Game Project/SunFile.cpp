@@ -2,17 +2,12 @@
 //#include <array>
 namespace sun_file
 {
-	SunNode test;
-	//
-	//constexpr uint8_t NUM_FILES = 1;
-	//constexpr std::array<const char*, NUM_FILES> filenames =
-	//{
-	//	"test.sun"
-	//};
+	SunNode Map, String;
+	std::string devFilePath = "C:\\Users\\lapto\\Desktop\\stuff\\NewSunFiles";
 
 	auto Load_All_Files(const std::string& file_path) -> void
 	{
-		test.Load(std::make_shared<SunReader>(file_path + filenames[0]));
+		Map.Load(std::make_shared<SunReader>(file_path + "\\" + "Map.sun"));
 		//test.Load(std::make_shared<SunReader>(file_path + "test.sun"));
 		//map.Load(std::make_shared<SunReader>(file_path + "simple.sun"));
 	}
@@ -25,7 +20,9 @@ namespace sun_file
 
 		for (auto filename : sun_file::filenames)
 		{
-			if (std::ifstream{ filename }.good() == false)
+			std::string fullPath = devFilePath + "\\" + filename;
+
+			if (std::ifstream{ fullPath }.good() == false)
 			{
 				ct++;
 				missing_files.emplace_back(filename);
@@ -47,10 +44,10 @@ namespace sun_file
 		}
 		//(ct == 1) ? return Error(Error::Code::MISSING_FILE, missing_files[0]) : continue;
 
-		// Try loading the files now.
+		// The files will be expected to be in the same directory as the .h/.cpp files but for now it points to the dev folder
 		try
 		{
-			Load_All_Files("./");
+			Load_All_Files(devFilePath);
 		}
 		catch (const std::exception& ex)
 		{

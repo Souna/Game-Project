@@ -19,7 +19,7 @@ public:
 	// Calls Update() on all game classes.
 	void Update();
 	// Calls Draw() on all game classes.
-	void Draw();
+	void Draw(float alpha);
 
 private:
 	// Window width.

@@ -797,7 +797,7 @@ auto SunNode::Expand_Extended_Property() -> bool
 		ret = Expand_Vector_Property();
 		break;
 	case 10:
-		//ret = Expand_Sound_Property();
+		ret = Expand_Sound_Property(500);
 		break;
 	case 11:
 		ret = Expand_Sub_Property();
@@ -862,7 +862,7 @@ auto SunNode::Expand_Vector_Property() -> bool
 	return true;
 }
 
-auto SunNode::Expand_Sound_Property(int64_t offset, int64_t eob) -> bool
+auto SunNode::Expand_Sound_Property(int64_t eob) -> bool
 {
 	sunPropertyType_ = SunPropertyType::AUDIO;
 	int unknow = reader_->Read_Byte();// Always 0

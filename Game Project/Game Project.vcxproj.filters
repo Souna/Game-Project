@@ -131,6 +131,18 @@
     <ClInclude Include="PhysicsObject.h">
       <Filter>Header Files\Gameplay\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Header Files\Gameplay\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Header Files\Gameplay\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Header Files\Gameplay\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="FootholdTree.h">
+      <Filter>Header Files\Gameplay\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -176,6 +188,24 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Foothold.cpp">
+      <Filter>Source Files\Gameplay\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source Files\Gameplay\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="Misc.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="MapPortals.h">
+      <Filter>Header Files\Gameplay\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Source Files\Gameplay\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files\Gameplay\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="FootholdTree.cpp">
       <Filter>Source Files\Gameplay\Physics</Filter>
     </ClCompile>
   </ItemGroup>

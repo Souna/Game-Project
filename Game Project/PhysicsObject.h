@@ -28,8 +28,8 @@ namespace game
 	{
 		Linear<double> x;
 		Linear<double> y;
-		double hori_speed = 0.0;
-		double vert_speed = 0.0;
+		double horizontal_speed = 0.0;
+		double vertical_speed = 0.0;
 
 		void Normalize()
 		{
@@ -39,8 +39,8 @@ namespace game
 
 		void Move()
 		{
-			x += hori_speed;
-			y += vert_speed;
+			x += horizontal_speed;
+			y += vertical_speed;
 		}
 
 		void Set_X(double d)
@@ -56,13 +56,13 @@ namespace game
 		void Limit_X(double d)
 		{
 			x = d;
-			hori_speed = 0.0;
+			horizontal_speed = 0.0;
 		}
 
 		void Limit_Y(double d)
 		{
 			y = d;
-			vert_speed = 0.0;
+			vertical_speed = 0.0;
 		}
 
 		void Move_X_Until(double d, uint16_t delay)
@@ -70,7 +70,7 @@ namespace game
 			if (delay)
 			{
 				double hdelta = d - x.Get();
-				hori_speed = constants::TIMESTEP * hdelta / delay;
+				horizontal_speed = constants::TIMESTEP * hdelta / delay;
 			}
 		}
 
@@ -79,18 +79,18 @@ namespace game
 			if (delay)
 			{
 				double vdelta = d - y.Get();
-				vert_speed = constants::TIMESTEP * vdelta / delay;
+				vertical_speed = constants::TIMESTEP * vdelta / delay;
 			}
 		}
 
 		bool Horizontal_Mobile() const
 		{
-			return hori_speed != 0.0;
+			return horizontal_speed != 0.0;
 		}
 
 		bool Vertical_Mobile() const
 		{
-			return vert_speed != 0.0;
+			return vertical_speed != 0.0;
 		}
 
 		bool Mobile() const
@@ -110,12 +110,12 @@ namespace game
 
 		double Next_X() const
 		{
-			return x + hori_speed;
+			return x + horizontal_speed;
 		}
 
 		double Next_Y() const
 		{
-			return y + vert_speed;
+			return y + vertical_speed;
 		}
 
 		int16_t Get_X() const
@@ -206,10 +206,10 @@ namespace game
 		bool on_ground_ = true;
 		bool enable_jump_down_ = false;
 
-		double hori_force_ = 0.0;
-		double vert_force_ = 0.0;
-		double hori_acceleration_ = 0.0;
-		double vert_acceleration_ = 0.0;
+		double horizontal_force_ = 0.0;
+		double vertical_force_ = 0.0;
+		double horizontal_acceleration_ = 0.0;
+		double vertical_acceleration_ = 0.0;
 
 		bool Is_Flag_Set(Flag f)
 		{

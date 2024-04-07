@@ -16,7 +16,7 @@ namespace game
 	class Foothold
 	{
 	public:
-		Foothold(SunNode src, uint16_t id, uint8_t layer, bool anchors);
+		Foothold(SunNode src, uint16_t id, uint8_t layer);
 		Foothold();
 
 		// Returns the individual ID of this foothold.
@@ -86,10 +86,6 @@ namespace game
 		// Returns a y-coordinate right below the given x-coordinate.
 		double Find_Ground_Below(double x) const;
 
-		// Display draggable foothold anchors.
-		bool Show_Draggable_Anchors() const;
-		// TODO: Make FH handles into their own class.
-
 	private:
 		uint16_t id_;
 		uint16_t previous_;
@@ -98,7 +94,5 @@ namespace game
 
 		Range<int16_t> horizontal_range_;
 		Range<int16_t> vertical_range_;
-
-		bool show_draggable_anchors_;
 	};
 }
