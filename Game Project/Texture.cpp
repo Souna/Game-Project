@@ -4,18 +4,18 @@
 
 namespace game
 {
-	Texture::Texture(SunNode src)
+	Texture::Texture(SunNode canvas_node)
 	{
-		if (src.Get_Node_Type() == SunNode::SunPropertyType::BITMAP)
+		if (canvas_node.Get_Node_Type() == SunNode::SunPropertyType::BITMAP)
 		{
-			origin_ = src["origin"];
-			std::string source = src["source"];
+			origin_ = canvas_node["origin"];
+			std::string source = canvas_node["source"];
 
-			auto foundSource = Find_Child(src, source);
+			auto foundSource = Find_Child(canvas_node, source);
 			auto foundChild = foundSource;
 			if (foundChild)
-				src = foundSource;
-			bitmap_ = src;
+				canvas_node = foundSource;
+			bitmap_ = canvas_node;
 			dimensions_ = Point<int16_t>(bitmap_.Get_Width(), bitmap_.Get_Height());
 		}
 	}
@@ -27,10 +27,11 @@ namespace game
 	auto Texture::Draw() const -> void
 	{
 		size_t id = bitmap_.Id();
-
 		if (id == 0) return;
 
-		//Window::Get().DrawSprite({ 0,0 }, bitmap_);
+		bitmap_.Data();
+		olc::Sprite* sprite = bitmap_.To_Sprite();
+		Window::Get().DrawSprite(origin_.X(), origin_.Y(), sprite);
 	}
 
 	auto Texture::Shift(Point<int16_t> amount) -> void

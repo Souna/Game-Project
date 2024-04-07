@@ -145,17 +145,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="Foothold.h" />
+    <ClInclude Include="FootholdTree.h" />
     <ClInclude Include="Interpolated.h" />
     <ClInclude Include="Lerp.h" />
     <ClInclude Include="MapBackgrounds.h" />
     <ClInclude Include="Misc.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Portal.h" />
     <ClInclude Include="Range.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Singleton.h" />
@@ -172,10 +176,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="Foothold.cpp" />
+    <ClCompile Include="FootholdTree.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapBackgrounds.cpp" />
+    <ClCompile Include="MapPortals.h" />
+    <ClCompile Include="Misc.cpp" />
     <ClCompile Include="olcPixelGameEngine.cpp" />
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StringUtils.cpp" />
     <ClCompile Include="SunAudio.cpp" />

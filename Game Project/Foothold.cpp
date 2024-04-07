@@ -2,14 +2,13 @@
 
 namespace game
 {
-	Foothold::Foothold(SunNode src, uint16_t id, uint8_t layer, bool anchors) :
+	Foothold::Foothold(SunNode src, uint16_t id, uint8_t layer) :
+		id_(id),
 		previous_(src["prev"]),
 		next_(src["next"]),
-		horizontal_range_(src["x1"], src["x2"]),
-		vertical_range_(src["y1"], src["y2"]),
-		id_(id),
 		layer_(layer),
-		show_draggable_anchors_(anchors) {};
+		horizontal_range_(src["x1"], src["x2"]),
+		vertical_range_(src["y1"], src["y2"]) {};
 
 	Foothold::Foothold() : id_(0), previous_(0), next_(0), layer_(0) {}
 
@@ -173,9 +172,4 @@ namespace game
 	//	vertical_range_.first = y1;
 	//	vertical_range_.second = y2;
 	//}
-
-	bool Foothold::Show_Draggable_Anchors() const
-	{
-		return show_draggable_anchors_;
-	}
 }

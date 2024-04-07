@@ -135,12 +135,12 @@ private:
 	auto Expand_Sub_Property() -> bool;
 	auto Expand_Canvas_Property() -> bool;
 	auto Expand_Vector_Property() -> bool;
+	auto Expand_Sound_Property(int64_t eob) -> bool;
 
 	friend std::ostream& operator<< (std::ostream& os, const SunNode& n);
 
-	// Trash
+
 	auto Expand_Shape_2dConvex2D(int64_t offset, int64_t eob) ->bool;
-	auto Expand_Sound_Property(int64_t offset, int64_t eob) -> bool;
 
 	std::shared_ptr<SunReader> reader_;
 	SunNodes children_;

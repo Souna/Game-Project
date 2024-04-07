@@ -4,13 +4,12 @@
 #include "Stage.h"
 #include "SunFile.h"
 
-Window::Window()
+Window::Window() : fullscreen_(false)
 {
 	sAppName = "THE GAME";
 	width_ = constants::Constants::Get().Get_View_Width();
 	height_ = constants::Constants::Get().Get_View_Height();
-	fullscreen_ = false;
-}
+};
 
 Error Window::Init()
 {
@@ -45,9 +44,8 @@ bool Window::OnUserCreate()
 			OnUserCreate();
 	}
 	// No init errors, continue.
-
-	game::Stage::Get().Load(1);	//loads 1.img. Temporary test map ID.
-
+	// Load map 0 for testing.
+	game::Stage::Get().Load(1, 0);
 	return true;
 }
 
@@ -60,7 +58,8 @@ bool Window::OnUserUpdate(float fElapsedTime)
 
 	Update();
 
-	Draw();
+	float alpha = static_cast<float>(fElapsedTime) / constants::TIMESTEP;
+	Draw(alpha);
 
 	return true;
 }
@@ -68,7 +67,7 @@ bool Window::OnUserUpdate(float fElapsedTime)
 void Window::DisplayDebugInfo(olc::vi2d& mouse)
 {
 	DrawString({ 10,10 }, "Mouse Physical: " + std::to_string((int)mouse.x) + ", " + std::to_string((int)mouse.y), olc::RED, 2.0f);
-	//DrawString({ 10,30 }, "Map ID: " + std::to_string(game::Stage::Get().Get_Map_ID()), olc::YELLOW, 2.0f);
+	DrawString({ 10,30 }, "Map ID: " + std::to_string(game::Stage::Get().Get_Map_ID()), olc::YELLOW, 2.0f);
 }
 
 void Window::Update()
@@ -76,9 +75,9 @@ void Window::Update()
 	game::Stage::Get().Update();
 }
 
-void Window::Draw()
+void Window::Draw(float alpha)
 {
 	//DrawString({})
-	game::Stage::Get().Draw();
+	game::Stage::Get().Draw(alpha);
 	DisplayDebugInfo(vimouse_);
 }

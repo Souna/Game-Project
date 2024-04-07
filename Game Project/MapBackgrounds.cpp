@@ -5,89 +5,47 @@
 
 namespace game
 {
-	// ["Map.sun"]["Map"]["Map1"]["back"]["0"] <-- this is what src is
-	Background::Background(SunNode src) : animated_(false)
-	{
-		view_width_ = constants::Constants::Get().Get_View_Width();
-		view_height_ = constants::Constants::Get().Get_View_Height();
-		width_offset_ = view_width_ / 2;
-		height_offset_ = view_height_ / 2;
-
-		//// Just selects ["Map.sun"]["Back"], where all the background images are stored.
-		//SunNode back_src = sun_file::map["Back"];
-
-		//// Checks the animated property of the current background number in the parameter.
-		animated_ = src["animated"].Get_Boolean();
-
-		//// The actual image from the file.
-		//animation_ = back_src[src["set"]][animated_ ? "animated" : "still"][src["no"]];
-		//animation_ = src
-
-		SunBitmap bmp = src.Get_Bitmap();
-		bmp.Data();
-		d = bmp.To_Decal();
-	}
-
-	void Background::Update()
-	{
-	}
-
-	void Background::Draw()
-	{
-		//Window::Get().DrawDecal({ 0,0 }, dbackground_ /*{0.25f,0.19f}*/);
-		//Window::Get().DrawSprite({ 0, 0 }, sbackground_);
-		Window::Get().DrawDecal({ 25,70 }, d);
-	}
-
-	void Background::Set_Type(Type type)
-	{
-	}
-
-	//===================================================================================================
-	//===================================================================================================
-	//===================================================================================================
-	//===================================================================================================
-	//===================================================================================================
-
 	MapBackgrounds::MapBackgrounds() {}
 
-	MapBackgrounds::MapBackgrounds(SunNode src)
+	MapBackgrounds::MapBackgrounds(SunNode back_folder)
 	{
 		int16_t bg_number = 0;
 
-		SunNode back = src[std::to_string(bg_number)];
-
-		while (back.Children_Size() > 0)	// alpha/animated/bS/cx/cy... etc
+		SunNode background = back_folder[std::to_string(bg_number)];
+		
+		//Iterate through all of the properties of the background.
+		while (background.Children_Size() > 0)
 		{
-			bool front = back["front"].Get_Boolean();
+			bool front = background["front"].Get_Boolean();
 
 			if (front)
-				foregrounds_vector_.push_back(back);
+				foregrounds_vector_.emplace_back(background);
 			else
-				backgrounds_vector_.push_back(back);
+				backgrounds_vector_.emplace_back(background);
 
 			bg_number++;
-
-			back = src[std::to_string(bg_number)];
+			background = back_folder[std::to_string(bg_number)];
 		}
-		black = false;
 
-		backgrounds_vector_.emplace_back(src);
+		black = back_folder["0"]["backgroundSet"].Get_String() == "";	// Map is drawn with black background if value of 0 is blank.
 	}
 
-	void MapBackgrounds::Draw_Backgrounds()
+	void MapBackgrounds::Draw_Backgrounds(double view_x, double view_y, float alpha) const
 	{
+		if (black)
+			Window::Get().Clear(olc::BLACK);
+
 		for (auto& background : backgrounds_vector_)
 		{
-			background.Draw();
+			background.Draw(view_x, view_y, alpha);
 		}
 	}
 
-	void MapBackgrounds::Draw_Foregrounds()
+	void MapBackgrounds::Draw_Foregrounds(double view_x, double view_y, float alpha) const
 	{
 		for (auto& foreground : foregrounds_vector_)
 		{
-			foreground.Draw();
+			foreground.Draw(view_x, view_y, alpha);
 		}
 	}
 

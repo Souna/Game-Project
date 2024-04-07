@@ -5,28 +5,28 @@
 
 namespace game
 {
-	Frame::Frame(SunNode src)
+	Frame::Frame(SunNode canvas_node)
 	{
-		texture_ = src;
-		bounds_ = src;
-		head_ = src["head"];
-		delay_ = src["delay"];	if (delay_ == 0) delay_ = 100;
+		texture_ = canvas_node;
+		bounds_ = canvas_node;
+		head_ = canvas_node["head"];
+		delay_ = canvas_node["delay"];	if (delay_ == 0) delay_ = 100;
 		// Learn about all this
-		bool has_a_0 = src["a0"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
-		bool has_a_1 = src["a1"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
+		bool has_a_0 = canvas_node["a0"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
+		bool has_a_1 = canvas_node["a1"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
 
 		if (has_a_0 && has_a_1)
 		{
-			opacities_ = { src["a0"], src["a1"] };
+			opacities_ = { canvas_node["a0"], canvas_node["a1"] };
 		}
 		else if (has_a_0)
 		{
-			uint8_t a0 = src["a0"];
+			uint8_t a0 = canvas_node["a0"];
 			opacities_ = { a0, 255 - a0 };
 		}
 		else if (has_a_1)
 		{
-			uint8_t a1 = src["a1"];
+			uint8_t a1 = canvas_node["a1"];
 			opacities_ = { 255 - a1, a1 };
 		}
 		else
@@ -34,15 +34,15 @@ namespace game
 			opacities_ = { 255, 255 };
 		}
 
-		bool has_z_0 = src["z0"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
-		bool has_z_1 = src["z1"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
+		bool has_z_0 = canvas_node["z0"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
+		bool has_z_1 = canvas_node["z1"].Get_Node_Type() == SunNode::SunPropertyType::INTEGER;
 
 		if (has_z_0 && has_z_1)
-			scales_ = { src["z0"], src["z1"] };
+			scales_ = { canvas_node["z0"], canvas_node["z1"] };
 		else if (has_z_0)
-			scales_ = { src["z0"], 0 };
+			scales_ = { canvas_node["z0"], 0 };
 		else if (has_z_1)
-			scales_ = { 100, src["z1"] };
+			scales_ = { 100, canvas_node["z1"] };
 		else
 			scales_ = { 100, 100 };
 	}
@@ -109,21 +109,32 @@ namespace game
 	//===================================================================================================
 	//===================================================================================================
 
-	Animation::Animation(SunNode src)
+	Animation::Animation(SunNode canvas_node)
 	{
-		bool is_texture = src.Get_Node_Type() == SunNode::SunPropertyType::BITMAP;
+		bool is_texture = canvas_node.Get_Node_Type() == SunNode::SunPropertyType::BITMAP;
 
 		if (is_texture)
 		{
-			frames_.push_back(src);
+			frames_.push_back(canvas_node);
 		}
 		else
 		{
 			std::set<int16_t> frame_ids;
 
+			//for (auto sub : src)
+			//{
+			//	if (sub.data_type() == nl::node::type::bitmap)
+			//	{
+			//		int16_t fid = string_conversion::or_default<int16_t>(sub.name(), -1);
+
+			//		if (fid >= 0)
+			//			frameids.insert(fid);
+			//	}
+			//}
+
 			for (auto& id : frame_ids)
 			{
-				auto sub = src[std::to_string(id)];
+				auto sub = canvas_node[std::to_string(id)];
 				frames_.push_back(sub);
 			}
 
@@ -131,7 +142,7 @@ namespace game
 				frames_.push_back(Frame());
 		}
 		animated_ = frames_.size() > 1;
-		zigzag_ = src["zigzag"].Get_Boolean();
+		zigzag_ = canvas_node["zigzag"].Get_Boolean();
 		Reset();
 	}
 
@@ -238,8 +249,25 @@ namespace game
 
 	auto Animation::Draw() const -> void
 	{
+		/*int16_t interframe = frame.get(alpha);
+		float interopc = opacity.get(alpha) / 255;
+		float interscale = xyscale.get(alpha) / 100;
+
+		bool modifyopc = interopc != 1.0f;
+		bool modifyscale = interscale != 1.0f;
+
+		if (modifyopc || modifyscale)
+			frames[interframe].draw(args + DrawArgument(interscale, interscale, interopc));
+		else
+			frames[interframe].draw(args);*/
+
 		frames_[0].Draw();
 	}
+
+	//auto Animation::Draw(const DrawArgument& args, float alpha) const -> void
+	//{
+
+	//}
 
 	auto Animation::Get_Delay(int16_t frame_id) const -> uint16_t
 	{

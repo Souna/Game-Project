@@ -27,7 +27,7 @@ namespace game
 		auto Find_Child(SunNode src, std::string)->SunNode;
 
 	private:
-		SunBitmap bitmap_;
+		mutable SunBitmap bitmap_;
 		Point<int16_t> origin_;
 		Point<int16_t> dimensions_;
 	};

@@ -36,7 +36,7 @@ public:
 	SunHeader header_;
 
 	auto Read_Null_Terminated_String()->std::string;
-	auto Transit_String(int64_t offset)->std::string; // Used for reading encrypted strings in .wz files.
+	auto Transit_String(int64_t offset)->std::string; // Used for reading encrypted strings in .wz files and eventually .sun files.
 	auto Read_String()->std::string;
 	auto Read_String(int32_t length)->std::string;
 	auto Read_Decrypt_String()->std::string;
