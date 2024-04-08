@@ -25,9 +25,12 @@ namespace game
 		auto Get_Origin() const->Point<int16_t>;
 		auto Get_Dimensions() const->Point<int16_t>;
 		auto Find_Child(SunNode src, std::string)->SunNode;
+		auto Add_Bitmap(const SunBitmap& bitmap)->void;
+		auto Data_To_Pixel_Array(const std::vector<uint8_t>& data) -> std::unique_ptr<olc::Pixel[]>;
 
 	private:
-		mutable SunBitmap bitmap_;
+		std::shared_ptr<olc::Sprite> sprite_ = std::make_shared<olc::Sprite>();
+		SunBitmap bitmap_;
 		Point<int16_t> origin_;
 		Point<int16_t> dimensions_;
 	};

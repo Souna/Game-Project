@@ -20,6 +20,7 @@ namespace game
 
 		// Resolve the actual background image and assign it to animation_.
 		animation_ = background_storage[background["backgroundSet"] + ".img"][animated_ ? "Ani" : "Back"][background["bgNumber"]];
+		
 		opacity_ = background["a"];
 		flipped_ = background["flip"].Get_Boolean();
 		copy_x_ = background["cx"];
@@ -41,8 +42,6 @@ namespace game
 
 	void Background::Draw(double view_x, double view_y, float alpha) const
 	{
-		//Window::Get().DrawDecal({ 0,0 }, dbackground_ /*{0.25f,0.19f}*/);
-		//Window::Get().DrawSprite({ 0, 0 }, sbackground_);
 		double x;
 
 		if (moving_object_.Horizontal_Mobile())

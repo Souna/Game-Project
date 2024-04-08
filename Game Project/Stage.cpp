@@ -18,6 +18,11 @@ namespace game
 		
 	}
 
+	void Stage::Init()
+	{
+
+	}
+
 	void Stage::Draw(float alpha)
 	{
 		/*if (state != State::ACTIVE)
