@@ -1,7 +1,9 @@
 #pragma once
+//#define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 #include "Singleton.h"
 #include "Error.h"
+#include "SunBitmap.h"
 
 class Window : public olc::PixelGameEngine, public Singleton<Window>
 {

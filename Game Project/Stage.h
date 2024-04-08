@@ -12,6 +12,8 @@ namespace game
 	public:
 		Stage();
 
+		void Init();
+
 		// Calls Update() for all objects on stage.
 		void Update();
 		// Calls Draw() for all objects on stage.

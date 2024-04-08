@@ -17,6 +17,8 @@ Error Window::Init()
 	if (Error error = sun_file::Init())
 		return error;
 
+	game::Stage::Get().Init();
+
 	return Error::NONE;
 }
 
@@ -53,12 +55,13 @@ bool Window::OnUserCreate()
 bool Window::OnUserUpdate(float fElapsedTime)
 {
 	vimouse_ = { GetMouseX(), GetMouseY() };
+	float alpha = static_cast<float>(fElapsedTime) / constants::TIMESTEP;
 
+	//Default blank background color
 	Clear(olc::BLUE);
 
 	Update();
 
-	float alpha = static_cast<float>(fElapsedTime) / constants::TIMESTEP;
 	Draw(alpha);
 
 	return true;
@@ -77,7 +80,7 @@ void Window::Update()
 
 void Window::Draw(float alpha)
 {
-	//DrawString({})
 	game::Stage::Get().Draw(alpha);
+	//FillTriangle({ vimouse_.x-100, vimouse_.y }, { vimouse_.x + 100, vimouse_.y }, { vimouse_.x, vimouse_.y + 100 }, olc::CYAN);
 	DisplayDebugInfo(vimouse_);
 }

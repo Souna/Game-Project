@@ -17,6 +17,7 @@ namespace game
 				canvas_node = foundSource;
 			bitmap_ = canvas_node;
 			dimensions_ = Point<int16_t>(bitmap_.Get_Width(), bitmap_.Get_Height());
+			Add_Bitmap(bitmap_);
 		}
 	}
 
@@ -28,10 +29,7 @@ namespace game
 	{
 		size_t id = bitmap_.Id();
 		if (id == 0) return;
-
-		bitmap_.Data();
-		olc::Sprite* sprite = bitmap_.To_Sprite();
-		Window::Get().DrawSprite(origin_.X(), origin_.Y(), sprite);
+		Window::Get().DrawSprite(origin_.X(), origin_.Y(), sprite_.get());
 	}
 
 	auto Texture::Shift(Point<int16_t> amount) -> void
@@ -74,5 +72,31 @@ namespace game
 		}
 
 		return SunNode();
+	}
+
+	auto Texture::Add_Bitmap(const SunBitmap& bitmap) -> void
+	{
+		sprite_->width = bitmap.Get_Width();
+		sprite_->height = bitmap.Get_Height();
+		auto data = bitmap_.Data();
+		auto pixelArray = Data_To_Pixel_Array(data);
+		sprite_->pColData = pixelArray.release();
+	}
+
+	auto Texture::Data_To_Pixel_Array(const std::vector<uint8_t>& data) -> std::unique_ptr<olc::Pixel[]>
+	{
+		auto pixels = std::make_unique<olc::Pixel[]>(data.size() / 4);
+
+		for (size_t i = 0; i < data.size() / 4; ++i)
+		{
+			size_t baseIndex = i * 4;
+			uint8_t red = data[baseIndex];
+			uint8_t green = data[baseIndex + 1];
+			uint8_t blue = data[baseIndex + 2];
+			uint8_t alpha = data[baseIndex + 3];
+			pixels[i] = olc::Pixel(red, green, blue, alpha);
+		}
+
+		return pixels;
 	}
 }
