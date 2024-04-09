@@ -135,59 +135,18 @@ auto SunBitmap::Data() -> std::vector<uint8_t>&
 
 	if (check != pixels * 4)
 	{
-		//std::cerr << "Size mismatch: " << std::dec << width_ << "," << height_ << "," << decompressed << "," << format_ <<
-		//	"," << format2_ << std::endl;
-		std::cerr << "SHIT";
-		//throw std::runtime_error("halp!");
+		std::cerr << "Size error @" << __func__ << std::endl;
 	}
-
-	pxvector_.resize(pixels);
 
 	for (auto i = 0; i < pixels; ++i)
 	{
 		auto& p = pixels8888[i];
 		pixelsout[i] = { p.r, p.g, p.b, p.a };
-		pxvector_[i].n = 0;	// <-- See what I can do with this, or if it even matters at all.
-		pxvector_[i].r = p.r;
-		pxvector_[i].g = p.g;
-		pxvector_[i].b = p.b;
-		pxvector_[i].a = p.a;
 	}
 
 	input_.swap(output);
 	output.clear();
 	return input_;
-}
-
-auto SunBitmap::To_Sprite() -> olc::Sprite*
-{
-	int pxiterator = 0;
-	olc::Sprite* outSprite = new olc::Sprite(width_, height_);
-	for (int y = 0; y < height_; y++)
-	{
-		for (int x = 0; x < width_; x++)
-		{
-			outSprite->SetPixel(x, y, pxvector_[pxiterator]);
-			pxiterator++;
-		}
-	}
-	return outSprite;
-}
-
-auto SunBitmap::To_Decal() -> olc::Decal*
-{
-	int pxiterator = 0;
-	olc::Sprite* conversion_sprite = new olc::Sprite(width_, height_);
-	for (int y = 0; y < height_; y++)
-	{
-		for (int x = 0; x < width_; x++)
-		{
-			conversion_sprite->SetPixel(x, y, pxvector_[pxiterator]);
-			pxiterator++;
-		}
-	}
-	olc::Decal* out_decal = new olc::Decal(conversion_sprite);
-	return out_decal;
 }
 
 auto SunBitmap::Set_Width(int32_t width) -> void
