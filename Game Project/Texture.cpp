@@ -29,7 +29,7 @@ namespace game
 	{
 		size_t id = bitmap_.Id();
 		if (id == 0) return;
-		Window::Get().DrawSprite(origin_.X(), origin_.Y(), sprite_.get());
+		Window::Get().DrawSprite((1920/2)-157, (1080/2)-128, sprite_.get());
 	}
 
 	auto Texture::Shift(Point<int16_t> amount) -> void
@@ -85,9 +85,10 @@ namespace game
 
 	auto Texture::Data_To_Pixel_Array(const std::vector<uint8_t>& data) -> std::unique_ptr<olc::Pixel[]>
 	{
-		auto pixels = std::make_unique<olc::Pixel[]>(data.size() / 4);
+		auto pixelCount = data.size() / 4;
+		auto pixels = std::make_unique<olc::Pixel[]>(pixelCount);
 
-		for (size_t i = 0; i < data.size() / 4; ++i)
+		for (size_t i = 0; i < pixelCount; ++i)
 		{
 			size_t baseIndex = i * 4;
 			uint8_t red = data[baseIndex];

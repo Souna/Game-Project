@@ -20,11 +20,6 @@ public:
 	inline auto Get_Length() const { return length_; }
 
 	auto Data()->std::vector<uint8_t>&;
-	// Converts a SunBitMap to an olc::Sprite*.
-	auto To_Sprite()->olc::Sprite*;
-	// Converts a SunBitMap to an olc::Sprite* and then converts said sprite
-	// into an olc::Decal* before returning. Decals live on the GPU.
-	auto To_Decal()->olc::Decal*;
 	auto Set_Width(int32_t width) -> void;
 
 	uint32_t height_ = 0;
@@ -38,5 +33,4 @@ public:
 
 private:
 	auto Content() const->std::unique_ptr<int8_t[]>;
-	std::vector<olc::Pixel> pxvector_;
 };
