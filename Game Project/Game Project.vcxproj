@@ -78,6 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -147,16 +148,21 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="DrawArgument.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="Foothold.h" />
     <ClInclude Include="FootholdTree.h" />
     <ClInclude Include="Interpolated.h" />
     <ClInclude Include="Lerp.h" />
     <ClInclude Include="MapBackgrounds.h" />
+    <ClInclude Include="MapInfo.h" />
     <ClInclude Include="Misc.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
+    <ClInclude Include="Optional.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Point.h" />
@@ -178,10 +184,12 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Foothold.cpp" />
     <ClCompile Include="FootholdTree.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapBackgrounds.cpp" />
+    <ClCompile Include="MapInfo.cpp" />
     <ClCompile Include="MapPortals.h" />
     <ClCompile Include="Misc.cpp" />
     <ClCompile Include="olcPixelGameEngine.cpp" />

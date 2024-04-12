@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "SunNode.h"
 #include "SunBitmap.h"
+#include "DrawArgument.h"
 
 namespace game
 {
@@ -16,7 +17,7 @@ namespace game
 		Texture();
 		~Texture();
 
-		auto Draw() const -> void;
+		auto Draw(const DrawArgument& arguments) const -> void;
 		auto Shift(Point<int16_t> amount) -> void;
 
 		auto Is_Valid() const -> bool;
@@ -30,6 +31,7 @@ namespace game
 
 	private:
 		std::shared_ptr<olc::Sprite> sprite_ = std::make_shared<olc::Sprite>();
+		std::shared_ptr<olc::Decal> decal_;
 		SunBitmap bitmap_;
 		Point<int16_t> origin_;
 		Point<int16_t> dimensions_;

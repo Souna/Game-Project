@@ -171,13 +171,13 @@ namespace game
 		// Return a point whose coordinates are the sum of this and another point's coordinates.
 		constexpr Point<T> operator + (Point<T> v) const
 		{
-			return { a_ + v.a_, b_ + v.b_ };
+			return { static_cast<T>(a_ + v.a_), static_cast<T>(b_ + v.b_) };
 		}
 
 		// Return a point whose coordinates are the difference of this and another point's coordinates.
 		constexpr Point<T> operator - (Point<T> v) const
 		{
-			return { a_ - v.a_, b_ - v.b_ };
+			return { static_cast<T>(a_ - v.a_), static_cast<T>(b_ - v.b_) };
 		}
 
 		// Return a point whose coordinates are the product of this and another point's coordinates.

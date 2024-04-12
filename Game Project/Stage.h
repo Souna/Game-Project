@@ -4,6 +4,8 @@
 #include "Window.h"
 #include <cstdint>
 #include "Physics.h"
+#include "Camera.h"
+#include "MapInfo.h"
 
 namespace game
 {
@@ -36,20 +38,15 @@ namespace game
 			ACTIVE
 		};
 
+		Camera camera_;
 		Physics physics_;
+		//Player player_;
 
+		//Optional<Playable> playable_;
 		int32_t map_id_;
-		State state;
+		State state_;
 
-		/*
-		Mobs object_;
-		BGM object_;
-		Tiles object_;
-		Footholds object_;
-		Effects object_;
-		*/
-
-		// Collection of backgrounds on the map.
+		MapInfo map_info_;
 		MapBackgrounds backgrounds_;
 		
 	};

@@ -53,9 +53,9 @@ namespace game
 		scales_ = { 0,0 };
 	}
 
-	auto Frame::Draw() const -> void
+	auto Frame::Draw(const DrawArgument& arguments) const -> void
 	{
-		texture_.Draw();
+		texture_.Draw(arguments);
 	}
 
 	auto Frame::Start_Opacity() const -> uint8_t
@@ -121,16 +121,16 @@ namespace game
 		{
 			std::set<int16_t> frame_ids;
 
-			//for (auto sub : src)
-			//{
-			//	if (sub.data_type() == nl::node::type::bitmap)
-			//	{
-			//		int16_t fid = string_conversion::or_default<int16_t>(sub.name(), -1);
+			for (auto sub : canvas_node)
+			{
+				if (sub.second.Get_Node_Type() == SunNode::SunPropertyType::BITMAP)
+				{
+					int16_t fid = string_conversion::Or_Default<int16_t>(sub.second.Name(), -1);
 
-			//		if (fid >= 0)
-			//			frameids.insert(fid);
-			//	}
-			//}
+					if (fid >= 0)
+						frame_ids.insert(fid);
+				}
+			}
 
 			for (auto& id : frame_ids)
 			{
@@ -247,21 +247,25 @@ namespace game
 		framestep_ = 1;
 	}
 
-	auto Animation::Draw() const -> void
+	auto Animation::Draw(const DrawArgument& arguments, float alpha) const -> void
 	{
-		/*int16_t interframe = frame.get(alpha);
-		float interopc = opacity.get(alpha) / 255;
-		float interscale = xyscale.get(alpha) / 100;
+		int16_t interframe = frame_.Get(alpha);
+		float interopc = opacity_.Get(alpha) / 255;
+		float interscale = xy_scale_.Get(alpha) / 100;
 
 		bool modifyopc = interopc != 1.0f;
 		bool modifyscale = interscale != 1.0f;
 
 		if (modifyopc || modifyscale)
-			frames[interframe].draw(args + DrawArgument(interscale, interscale, interopc));
+		{
+			frames_[interframe].Draw(arguments + DrawArgument(interscale, interscale, interopc));
+		}
 		else
-			frames[interframe].draw(args);*/
+		{
+			frames_[interframe].Draw(arguments);
+		}
 
-		frames_[0].Draw();
+		//frames_[0].Draw();
 	}
 
 	//auto Animation::Draw(const DrawArgument& args, float alpha) const -> void

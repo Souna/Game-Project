@@ -14,8 +14,10 @@ namespace constants
 
 		Constants()
 		{
-			VIEWWIDTH = 1920;
-			VIEWHEIGHT = 1080;
+			VIEWWIDTH = 1366;
+			VIEWHEIGHT = 768;
+			SCALEX = 1;
+			SCALEY = 1;
 		}
 
 		int16_t Get_View_Width()
@@ -38,10 +40,31 @@ namespace constants
 			VIEWHEIGHT = height;
 		}
 
+		int16_t Get_Scale_X()
+		{
+			return SCALEX;
+		}
+
+		void Set_Scale_X(int16_t scale)
+		{
+			SCALEX = scale;
+		}
+
+		int16_t Get_Scale_Y()
+		{
+			return SCALEY;
+		}
+
+		void Set_Scale_Y(int16_t scale)
+		{
+			SCALEY = scale;
+		}
+
 	private:
 		int16_t VIEWWIDTH;
 		int16_t VIEWHEIGHT;
-
+		int16_t SCALEX;
+		int16_t SCALEY;
 
 	};
 }

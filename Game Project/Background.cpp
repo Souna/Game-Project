@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Background.h"
 #include "SunFile.h"
+#include "DrawArgument.h"
 
 namespace game
 {
@@ -93,8 +94,7 @@ namespace game
 		for (int16_t tx = 0; tx < tw; tx += copy_x_)
 			for (int16_t ty = 0; ty < th; ty += copy_y_)
 			{
-				//animation_.Draw(DrawArgument(Point<int16_t>(ix + tx, iy + ty), flipped, opacity / 255), alpha);
-				animation_.Draw();
+				animation_.Draw(DrawArgument(Point<int16_t>(ix + tx, iy + ty), flipped_, opacity_ / 255), alpha);
 			}
 	}
 

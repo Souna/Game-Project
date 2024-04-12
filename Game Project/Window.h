@@ -17,7 +17,7 @@ public:
 	// Called every frame.
 	bool OnUserUpdate(float fElapsedTime);
 	// Show debug info (includes mouse pos).
-	void DisplayDebugInfo(olc::vi2d& mouse);
+	void DisplayDebugInfo(olc::vi2d& mouse, float alpha);
 	// Calls Update() on all game classes.
 	void Update();
 	// Calls Draw() on all game classes.
