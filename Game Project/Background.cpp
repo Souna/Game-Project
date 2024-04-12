@@ -137,11 +137,11 @@ namespace game
 		{
 		case Type::HORIZONTAL_MOVE_A:
 		case Type::HORIZONTAL_MOVE_B:
-			moving_object_.horizontal_speed = rotate_x_ / 16;
+			moving_object_.horizontal_speed = rotate_x_ / 64;
 			break;
 		case Type::VERTICAL_MOVE_A:
 		case Type::VERTICAL_MOVE_B:
-			moving_object_.vertical_speed = rotate_y_ / 16;
+			moving_object_.vertical_speed = rotate_y_ / 64;
 			break;
 		}
 	}

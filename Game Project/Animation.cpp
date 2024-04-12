@@ -264,14 +264,7 @@ namespace game
 		{
 			frames_[interframe].Draw(arguments);
 		}
-
-		//frames_[0].Draw();
 	}
-
-	//auto Animation::Draw(const DrawArgument& args, float alpha) const -> void
-	//{
-
-	//}
 
 	auto Animation::Get_Delay(int16_t frame_id) const -> uint16_t
 	{
