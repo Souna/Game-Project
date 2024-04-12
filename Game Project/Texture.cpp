@@ -18,6 +18,7 @@ namespace game
 			bitmap_ = canvas_node;
 			dimensions_ = Point<int16_t>(bitmap_.Get_Width(), bitmap_.Get_Height());
 			Add_Bitmap(bitmap_);
+			decal_ = std::make_shared<olc::Decal>(sprite_.get());
 		}
 	}
 
@@ -25,11 +26,23 @@ namespace game
 
 	Texture::~Texture() {}
 
-	auto Texture::Draw() const -> void
+	auto Texture::Draw(const DrawArgument& arguments) const -> void
 	{
 		size_t id = bitmap_.Id();
 		if (id == 0) return;
-		Window::Get().DrawSprite((1920/2)-157, (1080/2)-128, sprite_.get());
+
+		Rectangle<int16_t> rectangle = arguments.get_rectangle(origin_, dimensions_);
+		Color color = arguments.get_color();
+		float angle = arguments.get_angle();
+
+		if (color.invisible())
+			return;
+
+		olc::vf2d position = { static_cast<float>(rectangle.Left()), static_cast<float>(rectangle.Top()) };
+		olc::vf2d scale = { static_cast<float>(rectangle.Width()) / static_cast<float>(bitmap_.Get_Width()),
+							static_cast<float>(rectangle.Height()) / static_cast<float>(bitmap_.Get_Height()) };
+
+		Window::Get().DrawRotatedDecal(position, decal_.get(), angle);
 	}
 
 	auto Texture::Shift(Point<int16_t> amount) -> void

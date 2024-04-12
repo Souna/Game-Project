@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Rectangle.h"
 #include "Interpolated.h"
+#include "DrawArgument.h"
 
 namespace game
 {
@@ -19,7 +20,7 @@ namespace game
 		Frame(SunNode src);
 		Frame();
 
-		auto Draw() const -> void;
+		auto Draw(const DrawArgument& arguments) const -> void;
 
 		auto Start_Opacity() const->uint8_t;
 		auto Start_Scale() const->uint16_t;
@@ -59,7 +60,7 @@ namespace game
 		auto Update(uint16_t timestep) -> bool;
 		auto Reset() -> void;
 
-		auto Draw() const -> void;
+		auto Draw(const DrawArgument& arguments, float alpha) const -> void;
 
 		auto Get_Delay(int16_t frame) const->uint16_t;
 		auto Get_Delay_Until(int16_t frame) const->uint16_t;

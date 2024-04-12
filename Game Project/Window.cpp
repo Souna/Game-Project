@@ -59,7 +59,7 @@ bool Window::OnUserUpdate(float fElapsedTime)
 	float alpha = static_cast<float>(fElapsedTime) / constants::TIMESTEP;
 
 	//Default blank background color
-	Clear(olc::ORANGE);
+	Clear(olc::BLUE);
 
 	Update();
 
@@ -68,10 +68,11 @@ bool Window::OnUserUpdate(float fElapsedTime)
 	return true;
 }
 
-void Window::DisplayDebugInfo(olc::vi2d& mouse)
+void Window::DisplayDebugInfo(olc::vi2d& mouse, float alpha)
 {
 	DrawString({ 10,10 }, "Mouse Physical: " + std::to_string((int)mouse.x) + ", " + std::to_string((int)mouse.y), olc::RED, 2.0f);
 	DrawString({ 10,30 }, "Map ID: " + std::to_string(game::Stage::Get().Get_Map_ID()), olc::YELLOW, 2.0f);
+	DrawString({ 10,50 }, "Alpha Value: " + std::to_string(alpha), olc::WHITE, 2.0f);
 
 }
 
@@ -84,5 +85,5 @@ void Window::Draw(float alpha)
 {
 	game::Stage::Get().Draw(alpha);
 	//FillTriangle({ vimouse_.x-100, vimouse_.y }, { vimouse_.x + 100, vimouse_.y }, { vimouse_.x, vimouse_.y + 100 }, olc::CYAN);
-	DisplayDebugInfo(vimouse_);
+	DisplayDebugInfo(vimouse_, alpha);
 }

@@ -33,7 +33,7 @@ namespace game
 
 		static Type Type_By_Id(int32_t id)
 		{
-			if (id >= static_cast<int>(Type::NORMAL) && id <= static_cast<int>(Type::NORMAL))
+			if (id >= static_cast<int>(Type::NORMAL) && id <= static_cast<int>(Type::VERTICAL_MOVE_B))
 				return static_cast<Type>(id);
 			// else...
 

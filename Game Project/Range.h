@@ -1,5 +1,5 @@
 #pragma once
-
+#include <functional>
 namespace game
 {
 	// This class is entirely self-contained so there is no need for a .cpp file.
@@ -106,13 +106,14 @@ namespace game
 		// Return the negative of this range.
 		constexpr Range<T> operator - () const
 		{
-			return { -a_, -b_ };
+			std::negate<T> negator;
+			return { negator(a_), negator(b_)};
 		}
 
 		// Construct a symmetric range around mid.
 		static Range<T> Symmetric(const T& mid, const T& tail)
 		{
-			return { mid - tail, mid + tail };
+			return { static_cast<T>(mid - tail), static_cast<T>(mid + tail) };
 		}
 
 	private:
